@@ -1,4 +1,4 @@
-﻿var apiurl = "http://localhost:26087/mobile/";
+﻿var apiurl = "http://www.bahisor.com/mobile/";
 var redirectpage;
 $(document).on("pageload", function (event) {
     //    console.log(event.target.id);
