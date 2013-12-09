@@ -1,8 +1,26 @@
 ﻿var apiurl = "http://www.bahisor.com/mobile/";
 var redirectpage;
-$(document).on("pageinit", function (event) {
-console.log(event.target.id+" init");
-});
+function getjsonpcall(apimethod, data, fncallback) {
+    //, rnd: Math.floor((Math.random() * 1000))
+    $.ajax({
+        type: 'GET',
+        url: apiurl + apimethod,
+        data: data,
+        dataType: 'jsonp',
+        jsonp: false,
+        jsonpCallback: "fn",
+        success: function (data) { fncallback(data); }
+    });
+}
+function getjsoncall(apimethod, data, fncallback) {
+    $.ajax({
+        type: 'GET',
+        url: apiurl + apimethod,
+        data: data,
+        dataType: 'json',
+        success: function (data) { fncallback(data); }
+    });
+}
 $(document).on("pageshow", function (event) {
     console.log(event.target.id);
     if (event.target.id != 'loginDialog') {
@@ -10,7 +28,7 @@ $(document).on("pageshow", function (event) {
         if (window.localStorage.getItem("btoken") == null)
             $.mobile.changePage("#loginDialog");
         else
-            getjsonpcall("ValidateToken", { token: window.localStorage.getItem("btoken") }, ValidateCB);
+            getjsoncall("ValidateToken", { token: window.localStorage.getItem("btoken") }, ValidateCB);
     }
 });
 $(document).on("pagebeforecreate ", function (event) {
@@ -32,7 +50,7 @@ function TryLogin() {
     }
     //var guid = window.localStorage.getItem("mykey");
     //    if (guid == null)
-    getjsonpcall("Login", { nick: $('#loginnick').val(), pass: $('#loginpass').val() }, TryLoginCB);
+    getjsoncall("Login", { nick: $('#loginnick').val(), pass: $('#loginpass').val() }, TryLoginCB);
 }
 function ResetLogin() {
     window.localStorage.removeItem("btoken");
@@ -44,18 +62,4 @@ function TryLoginCB(data) {
         window.localStorage.setItem("btoken", data.MobileGuid);
         $.mobile.changePage("#" + redirectpage);
     }
-}
-function getjsonpcall(apimethod, data, fncallback) {
-    //, rnd: Math.floor((Math.random() * 1000))
-    $.ajax({
-        type: 'GET',
-        url: apiurl + apimethod,
-        data: data,
-        dataType: 'jsonp',
-        jsonp: false,
-        jsonpCallback: "fn",
-        success: function (data) {
-            fncallback(data);
-        }
-    });
 }
