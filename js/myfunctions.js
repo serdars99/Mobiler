@@ -1,32 +1,54 @@
-﻿$(document).on("pageinit", function () {
+﻿var apiurl = "http://localhost:26087/mobile/";
+var redirectpage;
+$(document).on("pageinit", function (event) {
+    //    console.log(event.target.id);
+    if (event.target.id != 'loginDialog') {
+        redirectpage = event.target.id;
+        if (window.localStorage.getItem("btoken") == null)
+            $.mobile.changePage("#loginDialog");
+        else
+            getjsonpcall("ValidateToken", { token: window.localStorage.getItem("btoken") }, ValidateCB);
+    }
 });
 $(document).on("pagebeforecreate ", function (event) {
-    if (event.target.id != 'page-pets') {
+    if (event.target.id != 'page-pets' && event.target.id != 'loginDialog') {
         $(event.target).prepend($('#baseheader').html());
         $(event.target).append($('#basefooter').html());
     }
     //console.log('pagebeforecreate ', event.target.id);
 });
-//jQuery.fn.headerOnAllPages = function () {
-//    var theHeader = $('#constantheader-wrapper').html();
-//    var allPages = $('div[data-role="page"]');
-//    for (var i = 1; i < allPages.length; i++) {
-//        allPages[i].innerHTML = theHeader + allPages[i].innerHTML;
-//    }
-//};
-//$(document).ready(function () {
-//    $().headerOnAllPages();
-//});
-function trylogin() {
-    var guid = window.localStorage.getItem("mykey");
-    if (guid == null)
-        $.ajax({
-            url: "http://localhost:26087/api/LoginUser?nick=idontgiveafuck&pass=123",
-            //data: { caller: $('#hdnaction').val(), rnd: Math.floor((Math.random() * 1000)) },
-            success: function (data, textStatus) {
-                guid = data.MobileGuid;
-                window.localStorage.setItem("mykey", guid);
-            }
-        });
-    alert(guid);
+function ValidateCB(data) {
+    console.log(data);
+    if (data == null)
+        $.mobile.changePage("#loginDialog");
+}
+function TryLogin() {
+    if ($('#loginnick').val() == '' || $('#loginpass').val() == '') {
+        alert("Alanları doldurun");
+        return;
+    }
+    //var guid = window.localStorage.getItem("mykey");
+    //    if (guid == null)
+    getjsonpcall("Login", { nick: $('#loginnick').val(), pass: $('#loginpass').val() }, TryLoginCB);
+}
+function TryLoginCB(data) {
+    console.log(data);
+    if (data != null) {
+        window.localStorage.setItem("btoken", data.MobileGuid);
+        $.mobile.changePage("#" + redirectpage);
+    }
+}
+function getjsonpcall(apimethod, data, fncallback) {
+    //, rnd: Math.floor((Math.random() * 1000))
+    $.ajax({
+        type: 'GET',
+        url: apiurl + apimethod,
+        data: data,
+        dataType: 'jsonp',
+        jsonp: false,
+        jsonpCallback: "fn",
+        success: function (data) {
+            fncallback(data);
+        }
+    });
 }
