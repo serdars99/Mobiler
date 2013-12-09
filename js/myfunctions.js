@@ -1,6 +1,6 @@
 ﻿var apiurl = "http://localhost:26087/mobile/";
 var redirectpage;
-$(document).on("pageinit", function (event) {
+$(document).on("pageload", function (event) {
     //    console.log(event.target.id);
     if (event.target.id != 'loginDialog') {
         redirectpage = event.target.id;
