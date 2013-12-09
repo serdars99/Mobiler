@@ -1,6 +1,10 @@
 ﻿var apiurl = "http://www.bahisor.com/mobile/";
 var redirectpage;
 $(document).on("pageinit", function (event) {
+console.log(event.target.id+" init");
+});
+$(document).on("pageshow", function (event) {
+    console.log(event.target.id);
     if (event.target.id != 'loginDialog') {
         redirectpage = event.target.id;
         if (window.localStorage.getItem("btoken") == null)
@@ -29,6 +33,10 @@ function TryLogin() {
     //var guid = window.localStorage.getItem("mykey");
     //    if (guid == null)
     getjsonpcall("Login", { nick: $('#loginnick').val(), pass: $('#loginpass').val() }, TryLoginCB);
+}
+function ResetLogin() {
+    window.localStorage.removeItem("btoken");
+    alert("login info has been deleted");
 }
 function TryLoginCB(data) {
     console.log(data);
