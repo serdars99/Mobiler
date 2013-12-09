@@ -1,7 +1,6 @@
 ﻿var apiurl = "http://www.bahisor.com/mobile/";
 var redirectpage;
-$(document).on("pageload", function (event) {
-    //    console.log(event.target.id);
+$(document).on("pageinit", function (event) {
     if (event.target.id != 'loginDialog') {
         redirectpage = event.target.id;
         if (window.localStorage.getItem("btoken") == null)
