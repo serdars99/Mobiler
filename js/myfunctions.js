@@ -1,45 +1,44 @@
-﻿var apiurl = "http://www.bahisor.com/mobile/";
-var redirectpage;
-function getjsonpcall(apimethod, data, fncallback) {
-    //, rnd: Math.floor((Math.random() * 1000))
-    $.ajax({
-        type: 'GET',
-        url: apiurl + apimethod,
-        data: data,
-        dataType: 'jsonp',
-        jsonp: false,
-        jsonpCallback: "fn",
-        success: function (data) { fncallback(data); }
-    });
+﻿//var apiurl = "http://www.bahisor.com/mobile/";
+var apiurl = "http://localhost:26087/mobile/";
+function getajaxdata(apimethod, postdata, fncallback) {
+    getjsoncall(apimethod, postdata, fncallback);
 }
-function getjsoncall(apimethod, data, fncallback) {
-    $.ajax({
-        type: 'GET',
-        url: apiurl + apimethod,
-        data: data,
-        dataType: 'json',
-        success: function (data) { fncallback(data); }
-    });
+function getjsonpcall(apimethod, postdata, fncallback) {
+    if (postdata != null)
+        postdata.rnd = Math.floor((Math.random() * 1000));
+    else
+        postdata = { rnd: Math.floor((Math.random() * 1000)) };
+    $.ajax({ type: 'GET', url: apiurl + apimethod, data: postdata, dataType: 'jsonp',
+        jsonp: false, jsonpCallback: "fn"
+    }).done(function (data) { fncallback(data); }).fail(function (data) { fncallback(null); });
+}
+function getjsoncall(apimethod, postdata, fncallback) {
+    if (postdata != null)
+        postdata.rnd = Math.floor((Math.random() * 1000));
+    else
+        postdata = { rnd: Math.floor((Math.random() * 1000)) };
+    $.ajax({ type: 'GET', url: apiurl + apimethod, data: postdata, dataType: 'json' }).done(function (data) { fncallback(data); }).fail(function (data) { fncallback(null); });
 }
 $(document).on("pageshow", function (event) {
-    console.log(event.target.id);
+    getajaxdata("Testd", null, null); 
+    //console.log(event.target.id);
     if (event.target.id != 'loginDialog') {
         redirectpage = event.target.id;
+        window.localStorage.setItem("redirpage", redirectpage);
         if (window.localStorage.getItem("btoken") == null)
             $.mobile.changePage("#loginDialog");
+        //$.mobile.changePage("#loginDialog", { transition: "pop", role: "dialog", reverse: false });
         else
-            getjsoncall("ValidateToken", { token: window.localStorage.getItem("btoken") }, ValidateCB);
+            getajaxdata("ValidateToken", { token: window.localStorage.getItem("btoken") }, ValidateCB);
     }
 });
 $(document).on("pagebeforecreate ", function (event) {
-    if (event.target.id != 'page-pets' && event.target.id != 'loginDialog') {
+    if (event.target.id != 'main' && event.target.id != 'loginDialog') {
         $(event.target).prepend($('#baseheader').html());
         $(event.target).append($('#basefooter').html());
     }
-    //console.log('pagebeforecreate ', event.target.id);
 });
 function ValidateCB(data) {
-    console.log(data);
     if (data == null)
         $.mobile.changePage("#loginDialog");
 }
@@ -48,18 +47,20 @@ function TryLogin() {
         alert("Alanları doldurun");
         return;
     }
-    //var guid = window.localStorage.getItem("mykey");
-    //    if (guid == null)
-    getjsoncall("Login", { nick: $('#loginnick').val(), pass: $('#loginpass').val() }, TryLoginCB);
+    getajaxdata("Login", { nick: $('#loginnick').val(), pass: $('#loginpass').val() }, TryLoginCB);
 }
 function ResetLogin() {
     window.localStorage.removeItem("btoken");
     alert("login info has been deleted");
 }
 function TryLoginCB(data) {
-    console.log(data);
     if (data != null) {
         window.localStorage.setItem("btoken", data.MobileGuid);
-        $.mobile.changePage("#" + redirectpage);
+        if (data.Member != undefined)
+            window.localStorage.setItem("member", data.Member);
+        $.mobile.changePage("#" + window.localStorage.getItem("redirpage"));
+        window.localStorage.removeItem("redirpage")
     }
+    else
+        alert('Yanlış kullanıcı adı veya şifre');
 }

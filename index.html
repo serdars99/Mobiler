@@ -7,15 +7,22 @@
     <link href="css/jquery.mobile-1.4.0-rc.1.min.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
-    <div data-role="page" id="page-pets">
+    <div data-role="page" id="main">
         <header id="baseheader">
-    <div data-role="header" >
-        <h1>
-            <a href="#page-friends" class="ui-btn ui-btn-inline" data-dialog="true">Kuponum</a>
-            <a href="#" data-rel="back" class="ui-btn ui-btn-inline">Go Back</a>
-            <button onclick="ResetLogin()" class="ui-btn ui-btn-inline" >Logini Sil</button>
-        </h1>
-    </div>
+
+<div data-role="header" style="overflow:hidden;">
+<h1>Bahisör</h1>
+    <!--<a href="#main" data-icon="gear" class="ui-btn-right">Kuponum</a>-->
+    <a href="#" class="ui-btn-right ui-btn ui-btn-inline ui-mini ui-corner-all ui-btn-icon-right">Kuponum</a>
+    <div data-role="navbar">
+        <ul>
+            <li><a href="#">Program</a></li>
+            <li><a href="#">Kuponlar</a></li>
+            <!--<li><a href="#">Sonuçlar</a></li>-->
+            <li><a href="#" onclick="ResetLogin()">Logini Sil</a></li>
+        </ul>
+    </div><!-- /navbar -->
+</div><!-- /header -->
     </header>
         <div id="home-content" data-role="content">
             <ul data-role="listview">
@@ -31,7 +38,7 @@
     </div>
     </footer>
     </div>
-    <div data-role="page" id="page-friends">
+    <div data-role="page" id="page2">
         <div id="Div1" data-role="content">
             <ul data-role="listview">
                 <li>David</li>
@@ -40,8 +47,8 @@
             </ul>
         </div>
     </div>
-    <div id="loginDialog" data-role="dialog">
-        <div id="myMessage">
+    <div id="loginDialog" data-role="page">
+        <div style="font-weight:bold">
         Giriş
         </div>
         Kullanıcı Adı: <input type="text" id="loginnick" />
