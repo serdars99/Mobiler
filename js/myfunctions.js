@@ -60,7 +60,6 @@ $(document).on("pagecreate", function (event) {
     $("body > [data-role='panel'] [data-role='listview']").listview();
     //console.log(event.target.id);
     if (event.target.id != 'main' && event.target.id != 'loginDialog') {
-        console.log(2);
         $(event.target).prepend($('#baseheader')[0].outerHTML);
         $(event.target).append($('#basefooter')[0].outerHTML);
     }
@@ -76,6 +75,9 @@ function ValidateCB(data) {
     //console.log(jdata);
     if (data == null)
         $.mobile.changePage("#loginDialog");
+    else {
+        $('#mydata').html(getmember().NickName + '(' + getmember().Credits + ' Puan)');
+    }
 }
 function DeleteComment() {
     getajaxdata("DeleteComment", { commentID: 1 }, function (data) { console.log(data) }, true);
