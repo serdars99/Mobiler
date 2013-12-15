@@ -35,7 +35,7 @@ function getmember() {
     if (m1 == null)
         return null;
     else
-        return JSON.parse(atob(m1));
+        return JSON.parse(atob(decodeURIComponent(escape(m1))));
 }
 function setmember(data) {
     window.localStorage.setItem("member", data);
@@ -56,13 +56,13 @@ $(document).on("pageshow", function (event) {
     if (event.target.id == 'main' && getmember() != null) PageChat();
 });
 $(document).on("pagecreate", function (event) {
-    ""
     $("body > [data-role='panel']").panel();
     $("body > [data-role='panel'] [data-role='listview']").listview();
     //console.log(event.target.id);
     if (event.target.id != 'main' && event.target.id != 'loginDialog') {
+        console.log(2);
         $(event.target).prepend($('#baseheader')[0].outerHTML);
-        $(event.target).append($('#basefooter').html());
+        $(event.target).append($('#basefooter')[0].outerHTML);
     }
 });
 //$(document).one("pageshow", function () {
@@ -72,7 +72,7 @@ $(document).on("pagecreate", function (event) {
 $(document).on("pagebeforecreate ", function (event) {
 });
 function ValidateCB(data) {
-    var jdata = JSON.parse(atob(data));
+    var jdata = JSON.parse(atob(decodeURIComponent(escape(data))));
     //console.log(jdata);
     if (data == null)
         $.mobile.changePage("#loginDialog");
@@ -93,7 +93,7 @@ function ResetLogin() {
 }
 function TryLoginCB(data) {
     if (data != null) {
-        var jdata = JSON.parse(atob(data));
+        var jdata = JSON.parse(atob(decodeURIComponent(escape(data))));
         //console.log(jdata);
         setmember(data);
         $.mobile.changePage("#" + window.localStorage.getItem("redirpage"));
@@ -104,6 +104,7 @@ function TryLoginCB(data) {
 }
 var defaulttext = 'Yazmak için tıklayın...';
 function PageChat() {
+//    $('#footer li').eq(0).addClass('ui-btn-active');
     $('#usertxt').html(defaulttext);
     $('#usertxt').on("click", function () { if ($(this).html() == defaulttext) $(this).html(''); })
     $('#usertxt').on("blur", function () { if ($(this).html() == '') $(this).html(defaulttext); })

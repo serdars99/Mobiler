@@ -9,23 +9,14 @@
 </head>
 <body>
     <div data-role="page" id="main">
-        <!--<header id="baseheader">-->
-        <div data-role="header" id="baseheader">
+        <div data-role="header" id="baseheader" data-theme="b">
             <a href="#outside" data-icon="bars" data-iconpos="notext">Menu</a>
             <h1>
                 Bahisör</h1>
             <a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Geri</a>
-            <a href="#" data-role="button" onclick="DeleteComment()" data-icon="star">YorumSil</a>
+            <!--<a href="#" data-role="button" onclick="DeleteComment()" data-icon="star">Test</a>-->
             <!--<a href="#" class="ui-btn-right ui-btn ui-btn-inline ui-mini ui-corner-all ui-btn-icon-right">Kuponum</a>-->
-            <!--<div data-role="navbar">
-        <ul>
-            <li><a href="#">Program</a></li>
-            <li><a href="#">Kuponlar</a></li>
-            <li><a href="#" onclick="ResetLogin()">Logini Sil</a></li>
-        </ul>
-    </div>-->
         </div>
-        <!--</header>-->
         <div id="home-content" data-role="content">
             <div class="chatTitle">
                 Günün Sohbeti</div>
@@ -47,33 +38,17 @@
                 </div>
             </div>
         </div>
-        <div id="confirm2" class="ui-content" data-role="popup" data-theme="a">
-            <p id="question2">
-                Are you sure you want to delete2:</p>
-            <div class="ui-grid-a">
-                <div class="ui-block-a">
-                    <a id="yes2" data-role="button" data-mini="true" data-shadow="false" data-theme="a"
-                        data-rel="back">Yes</a>
-                </div>
-                <div class="ui-block-b">
-                    <a id="cancel2" data-role="button" data-mini="true" data-shadow="false" data-theme="a"
-                        data-rel="back">Cancel</a>
-                </div>
+        <div data-role="footer" data-position="fixed" id="basefooter">
+            <div data-role="navbar">
+                <ul id="footer">
+                    <li><a href="#main" data-icon="grid" data-theme="b" class="ui-state-persist">Sohbet</a></li>
+                    <li><a href="#program" data-icon="grid" data-theme="b">Program</a></li>
+                    <li><a href="#coupon" data-icon="grid" data-theme="b">Kuponum</a></li>
+                    <li><a href="#profile" data-icon="grid" data-theme="b">Profilim</a></li>
+                    <li><a href="#others" data-icon="grid" data-theme="b">Diğer</a></li>
+                </ul>
             </div>
         </div>
-        <footer id="basefooter">
-        <div data-role="footer" data-position="fixed">
-    <div data-role="navbar">
-        <ul>
-            <li><a href="#" onclick="$(this).addClass('ui-btn-active')" data-icon="star" data-theme="a">Sohbet</a></li>
-            <li><a href="#" onclick="$(this).addClass('ui-btn-active')" data-icon="star" data-theme="a">Kuponum</a></li>
-            <li><a href="#program" data-icon="grid" data-theme="a" class="ui-btn-active">Program</a></li>
-            <li><a href="#" data-icon="grid" data-theme="b">Sonuçlar</a></li>
-            <li><a href="#" data-icon="grid" data-theme="b" class="ui-btn-active">Profilim</a></li>
-        </ul>
-    </div><!-- /navbar -->
-    </div>
-    </footer>
     </div>
     <div data-role="page" id="program">
         <div data-role="content">
