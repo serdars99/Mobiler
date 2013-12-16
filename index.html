@@ -12,8 +12,10 @@
         <div data-role="header" id="baseheader" data-theme="b">
             <a href="#outside" data-icon="bars" data-iconpos="notext">Menu</a>
             <h1>
-                Bahisör - <span id="mydata"></span></h1>
-            <a href="#" data-role="button" data-rel="back" data-icon="arrow-l" class="ui-btn-right">Geri</a>
+                Bahisör - <span id="mydata"></span>
+            </h1>
+            <a href="#" data-role="button" data-rel="back" data-icon="arrow-l" class="ui-btn-right">
+                Geri</a>
             <!--<a href="#" data-role="button" onclick="DeleteComment()" data-icon="star" class="ui-btn-icon-right ui-corner-all ui-mini ui-btn-right">Test</a>-->
             <!--<a href="#" class="ui-btn-right ui-btn ui-btn-inline ui-mini ui-corner-all ui-btn-icon-right">Kuponum</a>-->
         </div>
@@ -21,7 +23,8 @@
             <div class="chatTitle">
                 Günün Sohbeti</div>
             <textarea id="usertxt"></textarea>
-            <button onclick="senddailycomment()" icon="arrow-r">Gönder</button>
+            <button onclick="senddailycomment()" icon="arrow-r">
+                Gönder</button>
             <ul data-role="listview" data-divider-theme="a" data-inset="true" id="lastchat" class="touch">
             </ul>
         </div>
@@ -39,14 +42,14 @@
                 </div>
             </div>
         </div>
-        <div data-role="footer" data-position="fixed" id="basefooter">
+        <div data-role="footer" data-position="fixed" id="basefooter" data-id="dfooter">
             <div data-role="navbar">
                 <ul id="footer">
-                    <li><a href="#main" data-icon="grid" data-theme="b" class="ui-state-persist">Sohbet</a></li>
-                    <li><a href="#program" data-icon="grid" data-theme="b" >Program</a></li>
-                    <li><a href="#coupon" data-icon="grid" data-theme="b" >Kupon</a></li>
-                    <li><a href="#profile" data-icon="grid" data-theme="b" >Profilim</a></li>
-                    <li><a href="#others" data-icon="grid" data-theme="b" >Diğer</a></li>
+                    <li><a href="#main" data-icon="grid" data-theme="b" class="ui-btn-active ui-state-persist">Sohbet</a></li>
+                    <li><a href="#program" data-icon="grid" data-theme="b">Program</a></li>
+                    <li><a href="#coupon" data-icon="grid" data-theme="b">Kupon</a></li>
+                    <li><a href="#profile" data-icon="grid" data-theme="b">Profilim</a></li>
+                    <li><a href="#others" data-icon="grid" data-theme="b">Diğer</a></li>
                 </ul>
             </div>
         </div>
@@ -58,6 +61,17 @@
                 <li>John</li>
                 <li>Andy</li>
             </ul>
+        </div>
+        <div data-role="footer" data-position="fixed" data-id="dfooter">
+            <div data-role="navbar">
+                <ul id="Ul1">
+                    <li><a href="#main" data-icon="grid" data-theme="b">Sohbet</a></li>
+                    <li><a href="#program" data-icon="grid" data-theme="b" class="ui-btn-active ui-state-persist">Program</a></li>
+                    <li><a href="#coupon" data-icon="grid" data-theme="b">Kupon</a></li>
+                    <li><a href="#profile" data-icon="grid" data-theme="b">Profilim</a></li>
+                    <li><a href="#others" data-icon="grid" data-theme="b">Diğer</a></li>
+                </ul>
+            </div>
         </div>
     </div>
     <div id="loginDialog" data-role="page">
@@ -89,21 +103,6 @@
                     &nbsp;<strong class="urlnick" urlnick="#urlnick">#nick(#time)</strong>&nbsp;</p>
             </li>
         </ul>
-        <ul id="maincomments">
-            <li class="#zebra" >
-                <p class="gundem2">
-                    <a title="" href="/#urlnick">#nick</a> <span class="gundem1">#time</span>
-                </p>
-                <span title="" class="gundem3">#comment&nbsp; <span style="display: #islogged"><a
-                    href="/ajax/deleteeventcomment?commentid=#cid" data-ajax-success="DeleteEventCommentSuccess"
-                    data-ajax-method="GET" data-ajax-confirm="Emin misiniz?" data-ajax="true" class="cmDelete"
-                    style="display: #isowner">(sil)</a> &nbsp; <a href="javascript:void(0)" onclick="Reply('#nick')"
-                        class="cmreply">(cevapla)</a> <a href="javascript:void(0)" onclick="ComplainWindow(#cid)"
-                            class="cmreply">(şikayet et)</a> </span></span>
-                <div class="clear">
-                </div>
-            </li>
-        </ul>
     </div>
     <!-- /popup -->
     <!--    <button onclick="trylogin()">
@@ -112,6 +111,7 @@
     <script type="text/javascript" src="js/jquery.mobile-1.4.0-rc.1.min.js"></script>
     <!--<script type="text/javascript" src="js/moment.min.js"></script>-->
     <script type="text/javascript" src="js/moment-with-langs.min.js"></script>
+    <script type="text/javascript" src="js/basefunctions.js"></script>
     <script type="text/javascript" src="js/myfunctions.js"></script>
 </body>
 </html>

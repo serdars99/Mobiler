@@ -1,111 +1,4 @@
-﻿var apiurl = "http://www.bahisor.com/mobile/";
-//var apiurl = "http://localhost:26087/mobile/";
-var siteurl = "http://www.bahisor.com/";
-var chatcheckdate = moment(new Date()).subtract('days', 1);
-$(document).on("ready ", function () {
-    moment.lang('tr');
-});
-function fixlink(str) {
-    return str.replace(/href="\//ig, "href=\"" + siteurl);
-}
-function getajaxdata(apimethod, postdata, fncallback, sendtokeninfo) {
-    getjsoncall(apimethod, postdata, fncallback, sendtokeninfo);
-}
-function getjsonpcall(apimethod, postdata, fncallback) {
-    if (postdata != null)
-        postdata.rnd = Math.floor((Math.random() * 1000));
-    else
-        postdata = { rnd: Math.floor((Math.random() * 1000)) };
-    $.ajax({ type: 'GET', url: apiurl + apimethod, data: postdata, dataType: 'jsonp',
-        jsonp: false, jsonpCallback: "fn"
-    }).done(function (data) { if (fncallback != null) fncallback(data); }).fail(function (data) { fncallback(null); });
-}
-function getjsoncall(apimethod, postdata, fncallback, sendtokeninfo) {
-    if (postdata != null)
-        postdata.rnd = Math.floor((Math.random() * 1000));
-    else
-        postdata = { rnd: Math.floor((Math.random() * 1000)) };
-    var token = null;
-    if (sendtokeninfo)
-        token = { "token": getmember().MobileGuid };
-    $.ajax({ type: 'GET', headers: token, url: apiurl + apimethod, data: postdata, dataType: 'json' }).done(function (data) { if (fncallback != null) fncallback(data); }).fail(function (data) { fncallback(null); });   //btoa()
-}
-function getmember() {
-    var m1 = window.localStorage.getItem("member");
-    if (m1 == null)
-        return null;
-    else
-        return JSON.parse(atob(decodeURIComponent(escape(m1))));
-}
-function setmember(data) {
-    window.localStorage.setItem("member", data);
-}
-$(document).on("pageshow", function (event) {
-    //getajaxdata("Testd", null, null);
-    //console.log(event.target.id);
-    if (event.target.id != 'loginDialog') {
-        redirectpage = event.target.id;
-        window.localStorage.setItem("redirpage", redirectpage);
-        if (getmember() == null)
-            $.mobile.changePage("#loginDialog");
-        //$.mobile.changePage("#loginDialog", { transition: "pop", role: "dialog", reverse: false });
-        else {
-            getajaxdata("ValidateToken", { token: getmember().MobileGuid }, ValidateCB);
-        }
-    }
-    if (event.target.id == 'main' && getmember() != null) PageChat();
-});
-$(document).on("pagecreate", function (event) {
-    $("body > [data-role='panel']").panel();
-    $("body > [data-role='panel'] [data-role='listview']").listview();
-    //console.log(event.target.id);
-    if (event.target.id != 'main' && event.target.id != 'loginDialog') {
-        $(event.target).prepend($('#baseheader')[0].outerHTML);
-        $(event.target).append($('#basefooter')[0].outerHTML);
-    }
-});
-//$(document).one("pageshow", function () {
-//    $("body > [data-role='header']").toolbar();
-//    $("body > [data-role='header'] [data-role='navbar']").navbar();
-//});
-$(document).on("pagebeforecreate ", function (event) {
-});
-function ValidateCB(data) {
-    //console.log(jdata);
-    if (data == null)
-        $.mobile.changePage("#loginDialog");
-    else {
-        var jdata = JSON.parse(atob(decodeURIComponent(escape(data))));
-        $('#mydata').html(getmember().NickName + '(' + getmember().Credits + ' Puan)');
-    }
-}
-function DeleteComment() {
-    getajaxdata("DeleteComment", { commentID: 1 }, function (data) { console.log(data) }, true);
-}
-function TryLogin() {
-    if ($('#loginnick').val() == '' || $('#loginpass').val() == '') {
-        alert("Alanları doldurun");
-        return;
-    }
-    getajaxdata("Login", { nick: $('#loginnick').val(), pass: $('#loginpass').val() }, TryLoginCB);
-}
-function ResetLogin() {
-    window.localStorage.removeItem("member");
-    alert("login info has been deleted");
-}
-function TryLoginCB(data) {
-    if (data != null) {
-        var jdata = JSON.parse(atob(decodeURIComponent(escape(data))));
-        //console.log(jdata);
-        setmember(data);
-        $.mobile.changePage("#" + window.localStorage.getItem("redirpage"));
-        window.localStorage.removeItem("redirpage");
-    }
-    else
-        alert('Yanlış kullanıcı adı veya şifre');
-}
-var defaulttext = 'Yazmak için tıklayın...';
-function PageChat() {
+﻿function PageChat() {
     //    $('#footer li').eq(0).addClass('ui-btn-active');
     $('#usertxt').html(defaulttext);
     $('#usertxt').on("click", function () { if ($(this).html() == defaulttext) $(this).html(''); })
@@ -138,14 +31,22 @@ function PageChatCallBack(data) {
         str += li;
     });
     $('#lastchat').html(str);
-    //var height = count == 10 ? '330' : '730';
-    //            $('#chatholder').slimScroll({
-    //                height: height + 'px'
-    //            });
-
     $("#lastchat").listview();
     $("#lastchat").listview('refresh');
     attachtouchchatlist();
+}
+function attachswipebase(listitem, transition, completefunction) {
+    listitem.parent().children().children().removeClass("ui-btn-active");
+    listitem.children(".ui-btn").addClass("ui-btn-active");
+    if (transition) {
+        listitem
+                    .addClass(transition)
+                    .on("webkitTransitionEnd transitionend otransitionend", function () {
+                        completefunction(listitem);
+                    })
+                    .prev("li").children("a").addClass("border-bottom")
+                    .end().end().children(".ui-btn").removeClass("ui-btn-active");
+    }
 }
 function attachtouchchatlist() {
     $(document).on("swipeleft", "#lastchat li", function (event) {
@@ -154,13 +55,18 @@ function attachtouchchatlist() {
         var listitem = $(this),
             dir = event.type === "swipeleft" ? "left" : "right",
             transition = $.support.cssTransform3d ? dir : false;
-        confirmAndDelete(listitem, transition, event.type === "swipeleft" ? 1 : 2);
+        confirmAndDeleteDailyComment(listitem, transition);
     });
     $(document).on("swiperight", "#lastchat li", function (event) {
         var listitem = $(this),
             dir = event.type === "swipeleft" ? "left" : "right",
             transition = $.support.cssTransform3d ? dir : false;
-        confirmAndDelete(listitem, transition, event.type === "swipeleft" ? 1 : 2);
+
+        //attachswipebase(listitem, transition, function (listitem) {
+        if ($('#usertxt').val() == defaulttext) $('#usertxt').val('');
+        $("#usertxt").val($("#usertxt").val() + ' @' + listitem.children().children('.urlnick').attr('urlnick') + ' ');
+        $("#usertxt").focus();
+        //});
     });
     //    if (!$.mobile.support.touch) {
     //        $("#lastchat").removeClass("touch");
@@ -169,51 +75,58 @@ function attachtouchchatlist() {
     //            confirmAndDelete(listitem, null, event.type === "swipeleft" ? 1 : 2);
     //        });
     //    }
-    function confirmAndDelete(listitem, transition, postfix) {
-        listitem.parent().children().children().removeClass("ui-btn-active");
-        listitem.children(".ui-btn").addClass("ui-btn-active");
-        $("#confirm" + postfix + " .topic").remove();
-        if (postfix == 1) {
-            listitem.find(".topic").clone().insertAfter("#question" + postfix);
-            $("#confirm" + postfix).popup("open");
-            $("#confirm" + postfix + " #yes" + postfix).on("click", function () {
-                if (transition) {
-                    listitem
-                    .addClass(transition)
-                    .on("webkitTransitionEnd transitionend otransitionend", function () {
-                        listitem.remove();
-                        $("#lastchat").listview("refresh").find(".border-bottom").removeClass("border-bottom");
-                        getajaxdata("DeleteComment", { commentID: listitem.attr('cid') }, function (data) {
-                            console.log(data);
-                            $("#confirm" + postfix).popup("close");
-                            //                            $(document).on("swipeleft swiperight", "#lastchat li").off();
-                            //                            getajaxdata("RefreshChat", { lastcheckdate: moment(chatcheckdate).format("YYYY-MM-DD HH:mm:ss"), count: 10 }, PageChatCallBack);
-                        }, true);
-                    })
-                    .prev("li").children("a").addClass("border-bottom")
-                    .end().end().children(".ui-btn").removeClass("ui-btn-active");
-                }
-                else {
-                    listitem.remove();
-                    $("#lastchat").listview("refresh");
-                }
+    function confirmAndDeleteDailyComment(listitem, transition) {
+        //$("#confirm1" + " .topic").remove();
+        //listitem.find(".topic").clone().insertAfter("#question1");
+        $("#confirm1").popup("open");
+        $("#confirm1" + " #yes1").on("click", function () {
+            attachswipebase(listitem, transition, function (listitem) {
+                listitem.remove();
+                $("#lastchat").listview("refresh").find(".border-bottom").removeClass("border-bottom");
+                getajaxdata("DeleteComment", { commentID: listitem.attr('cid') }, function (data) {
+                    //console.log(data);
+                    $("#confirm1").popup("close");
+                }, true);
             });
-            $("#confirm" + postfix + " #cancel" + postfix).on("click", function () {
-                listitem.children().removeClass("ui-btn-active");
-                $("#confirm" + postfix + " #yes" + postfix).off();
-            });
-        }
-        else if (postfix == 2) {
-            if ($('#usertxt').val() == defaulttext) $('#usertxt').val('');
-            $("#usertxt").val($("#usertxt").val() + ' @' + listitem.children().children('.urlnick').attr('urlnick') + ' ');
-            $("#usertxt").focus();
-        }
+        });
+        $("#confirm1" + " #cancel1").on("click", function () {
+            listitem.children().removeClass("ui-btn-active");
+            $("#confirm1" + " #yes1").off();
+        });
     }
 }
 function senddailycomment() {
     getajaxdata("SendDailyComment", { comment: $('#usertxt').val() }, function (data) {
         console.log(data);
+        $('#usertxt').val(defaulttext);
         $(document).on("swipeleft swiperight", "#lastchat li").off();
         getajaxdata("RefreshChat", { lastcheckdate: moment(chatcheckdate).format("YYYY-MM-DD HH:mm:ss"), count: 10 }, PageChatCallBack);
     }, true);
+}
+function PageProgram() {
+    loadprogram();
+}
+function loadprogram() {
+    getajaxdata("GetProgramFileName", null, function (data1) {
+        //        getajaxdata("xml/" + data1.fname, null, function (data) {
+        //            console.log(data);
+        //        }, false, true);
+        readFeed(siteurl + "xml/" + data1.fname);
+    }, false);
+}
+function readFeed(url) {
+    $.get(url, function (result) {
+        console.log(result);
+        var browserName = navigator.appName;
+        var doc;
+        if (browserName == 'Microsoft Internet Explorer') {
+            doc = new ActiveXObject('Microsoft.XMLDOM');
+            doc.async = 'false'
+            doc.loadXML(result.results);
+        } else {
+            doc = (new DOMParser()).parseFromString(result.results, 'text/xml');
+        }
+        var xml = doc;
+        console.log(xml);
+    });
 }
