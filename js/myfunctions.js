@@ -1,5 +1,5 @@
-﻿//var apiurl = "http://www.bahisor.com/mobile/";
-var apiurl = "http://localhost:26087/mobile/";
+﻿var apiurl = "http://www.bahisor.com/mobile/";
+//var apiurl = "http://localhost:26087/mobile/";
 var siteurl = "http://www.bahisor.com/";
 var chatcheckdate = moment(new Date()).subtract('days', 1);
 $(document).on("ready ", function () {
