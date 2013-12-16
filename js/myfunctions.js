@@ -185,6 +185,7 @@ function attachtouchchatlist() {
                         $("#lastchat").listview("refresh").find(".border-bottom").removeClass("border-bottom");
                         getajaxdata("DeleteComment", { commentID: listitem.attr('cid') }, function (data) {
                             console.log(data);
+                            $("#confirm" + postfix).popup("close");
                             //                            $(document).on("swipeleft swiperight", "#lastchat li").off();
                             //                            getajaxdata("RefreshChat", { lastcheckdate: moment(chatcheckdate).format("YYYY-MM-DD HH:mm:ss"), count: 10 }, PageChatCallBack);
                         }, true);
