@@ -21,6 +21,7 @@
             <div class="chatTitle">
                 Günün Sohbeti</div>
             <textarea id="usertxt"></textarea>
+            <button onclick="senddailycomment()" icon="arrow-r">Gönder</button>
             <ul data-role="listview" data-divider-theme="a" data-inset="true" id="lastchat" class="touch">
             </ul>
         </div>
@@ -79,7 +80,7 @@
     <div id="htmlhelpers" style="display: none">
         <!--<li data-role="list-divider">Friday, October 8, 2010 <span class="ui-li-count">2</span></li>-->
         <ul id="maincommentsx">
-            <li class="#delclass">
+            <li class="#delclass" cid="#cid">
                 <!--<a href="index.html">-->
                 <!--<h2>#nick</h2>-->
                 <p>
@@ -89,7 +90,7 @@
             </li>
         </ul>
         <ul id="maincomments">
-            <li class="#zebra">
+            <li class="#zebra" >
                 <p class="gundem2">
                     <a title="" href="/#urlnick">#nick</a> <span class="gundem1">#time</span>
                 </p>

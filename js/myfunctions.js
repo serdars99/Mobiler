@@ -71,11 +71,11 @@ $(document).on("pagecreate", function (event) {
 $(document).on("pagebeforecreate ", function (event) {
 });
 function ValidateCB(data) {
-    var jdata = JSON.parse(atob(decodeURIComponent(escape(data))));
     //console.log(jdata);
     if (data == null)
         $.mobile.changePage("#loginDialog");
     else {
+        var jdata = JSON.parse(atob(decodeURIComponent(escape(data))));
         $('#mydata').html(getmember().NickName + '(' + getmember().Credits + ' Puan)');
     }
 }
@@ -99,14 +99,14 @@ function TryLoginCB(data) {
         //console.log(jdata);
         setmember(data);
         $.mobile.changePage("#" + window.localStorage.getItem("redirpage"));
-        window.localStorage.removeItem("redirpage")
+        window.localStorage.removeItem("redirpage");
     }
     else
         alert('Yanlış kullanıcı adı veya şifre');
 }
 var defaulttext = 'Yazmak için tıklayın...';
 function PageChat() {
-//    $('#footer li').eq(0).addClass('ui-btn-active');
+    //    $('#footer li').eq(0).addClass('ui-btn-active');
     $('#usertxt').html(defaulttext);
     $('#usertxt').on("click", function () { if ($(this).html() == defaulttext) $(this).html(''); })
     $('#usertxt').on("blur", function () { if ($(this).html() == '') $(this).html(defaulttext); })
@@ -183,7 +183,11 @@ function attachtouchchatlist() {
                     .on("webkitTransitionEnd transitionend otransitionend", function () {
                         listitem.remove();
                         $("#lastchat").listview("refresh").find(".border-bottom").removeClass("border-bottom");
-                        //$(document).on("swipeleft swiperight", "#lastchat li").off();
+                        getajaxdata("DeleteComment", { commentID: listitem.attr('cid') }, function (data) {
+                            console.log(data);
+                            //                            $(document).on("swipeleft swiperight", "#lastchat li").off();
+                            //                            getajaxdata("RefreshChat", { lastcheckdate: moment(chatcheckdate).format("YYYY-MM-DD HH:mm:ss"), count: 10 }, PageChatCallBack);
+                        }, true);
                     })
                     .prev("li").children("a").addClass("border-bottom")
                     .end().end().children(".ui-btn").removeClass("ui-btn-active");
@@ -204,4 +208,11 @@ function attachtouchchatlist() {
             $("#usertxt").focus();
         }
     }
+}
+function senddailycomment() {
+    getajaxdata("SendDailyComment", { comment: $('#usertxt').val() }, function (data) {
+        console.log(data);
+        $(document).on("swipeleft swiperight", "#lastchat li").off();
+        getajaxdata("RefreshChat", { lastcheckdate: moment(chatcheckdate).format("YYYY-MM-DD HH:mm:ss"), count: 10 }, PageChatCallBack);
+    }, true);
 }
