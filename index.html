@@ -23,8 +23,6 @@
             <div class="chatTitle">
                 Günün Sohbeti</div>
             <textarea id="usertxt"></textarea>
-            <button onclick="senddailycomment()" icon="arrow-r">
-                Gönder</button>
             <ul data-role="listview" data-divider-theme="a" data-inset="true" id="lastchat" class="touch">
             </ul>
         </div>
@@ -56,10 +54,9 @@
     </div>
     <div data-role="page" id="program">
         <div data-role="content">
-            <ul data-role="listview">
-                <li>David</li>
-                <li>John</li>
-                <li>Andy</li>
+            <div class="chatTitle">
+                Program</div>
+            <ul data-role="listview" data-divider-theme="a" data-inset="true" id="lastprg" class="touch">
             </ul>
         </div>
         <div data-role="footer" data-position="fixed" data-id="dfooter">
@@ -99,6 +96,15 @@
                 <!--<h2>#nick</h2>-->
                 <p>
                     #comment</p>
+                <p class="ui-li-aside" style="position: static">
+                    &nbsp;<strong class="urlnick" urlnick="#urlnick">#nick(#time)</strong>&nbsp;</p>
+            </li>
+        </ul>
+        <ul id="programhidden">
+            <li class="#delclass" cid="#cid">
+                <!--<a href="index.html">-->
+                <!--<h2>#nick</h2>-->
+                <p>#ename</p>
                 <p class="ui-li-aside" style="position: static">
                     &nbsp;<strong class="urlnick" urlnick="#urlnick">#nick(#time)</strong>&nbsp;</p>
             </li>

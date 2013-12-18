@@ -1,15 +1,28 @@
 ﻿function PageChat() {
     //    $('#footer li').eq(0).addClass('ui-btn-active');
     $('#usertxt').html(defaulttext);
-    $('#usertxt').on("click", function () { if ($(this).html() == defaulttext) $(this).html(''); })
-    $('#usertxt').on("blur", function () { if ($(this).html() == '') $(this).html(defaulttext); })
-    getajaxdata("RefreshChat", { lastcheckdate: moment(chatcheckdate).format("YYYY-MM-DD HH:mm:ss"), count: 10 }, PageChatCallBack);
+    $('#usertxt').on("click", function () { if ($(this).html() == defaulttext) $(this).html(''); });
+    $('#usertxt').on("blur", function () { if ($(this).html() == '') $(this).html(defaulttext); });
+    $('#usertxt').off('keydown').on('keydown', function (e) {
+        if (e.which == 13) { senddailycomment(); }
+    });
+    //    var localitem = loadlocalitem("program");
+    //    if (localitem != null)
+    //        PageChatCallBack(localitem.obj);
+    //    else
+    refreshchat();
+    chatinterval = setInterval("refreshchat()", 5000);
+}
+function refreshchat()
+{
+getajaxdata("RefreshChat", { lastcheckdate: moment(chatcheckdate).format("YYYY-MM-DD HH:mm:ss"), count: 10 }, PageChatCallBack, false, true);
 }
 function PageChatCallBack(data) {
     if (data == undefined)
         return;
     //console.log(JSON.parse(data));
     chatcheckdate = new Date(data.date.match(/\d+/)[0] * 1);
+    savelocalitem("chat", data, chatcheckdate);
     $('#lastchat').html('');
     var str = '';
     var deleters = '1,2';
@@ -86,7 +99,7 @@ function attachtouchchatlist() {
                 getajaxdata("DeleteComment", { commentID: listitem.attr('cid') }, function (data) {
                     //console.log(data);
                     $("#confirm1").popup("close");
-                }, true);
+                }, true, false);
             });
         });
         $("#confirm1" + " #cancel1").on("click", function () {
@@ -97,36 +110,45 @@ function attachtouchchatlist() {
 }
 function senddailycomment() {
     getajaxdata("SendDailyComment", { comment: $('#usertxt').val() }, function (data) {
-        console.log(data);
-        $('#usertxt').val(defaulttext);
-        $(document).on("swipeleft swiperight", "#lastchat li").off();
+        $('#usertxt').val('');
         getajaxdata("RefreshChat", { lastcheckdate: moment(chatcheckdate).format("YYYY-MM-DD HH:mm:ss"), count: 10 }, PageChatCallBack);
-    }, true);
+    }, true, false);
 }
 function PageProgram() {
-    loadprogram();
+    var prgcheckdate = moment(new Date()).subtract('days', 1);
+    var localprg = loadlocalitem("program");
+    if (localprg != null) {
+        prgcheckdate = moment(localprg.lastdate);
+        loadprogram(localprg.obj);
+    }
+    else
+        checkprogram(prgcheckdate);
 }
-function loadprogram() {
-    getajaxdata("GetProgramFileName", null, function (data1) {
-        //        getajaxdata("xml/" + data1.fname, null, function (data) {
-        //            console.log(data);
-        //        }, false, true);
-        readFeed(siteurl + "xml/" + data1.fname);
+function checkprogram(prgcheckdate) {
+    getajaxdata("GetProgram", { lastcheckdate: prgcheckdate.format("YYYY-MM-DD HH:mm:ss") }, function (data) {
+        data = JSON.parse(data);
+        var lastdate = moment(new Date(data.lastdate));
+        savelocalitem("program", data, lastdate);
+        loadprogram(data);
     }, false);
 }
-function readFeed(url) {
-    $.get(url, function (result) {
-        console.log(result);
-        var browserName = navigator.appName;
-        var doc;
-        if (browserName == 'Microsoft Internet Explorer') {
-            doc = new ActiveXObject('Microsoft.XMLDOM');
-            doc.async = 'false'
-            doc.loadXML(result.results);
-        } else {
-            doc = (new DOMParser()).parseFromString(result.results, 'text/xml');
-        }
-        var xml = doc;
-        console.log(xml);
+function loadprogram(data) {
+    $('#lastprg').html('');
+    var str = '';
+    var deleters = '1,2';
+    var iszebra = false;
+    $(data.events).each(function () {
+        iszebra = !iszebra;
+        var li = $('#programhidden').html();
+        li = li.replace(/#ename/g, this.ename);
+//        li = li.replace(/#comment/g, fixlink(this.CommentText));
+//        li = li.replace(/#nick/g, this.NickName);
+//        li = li.replace(/#urlnick/g, this.NickName.replace(/ /g, '-'));
+//        li = li.replace(/#comment/g, this.CommentText);
+//        li = li.replace(/#zebra/g, iszebra ? 'zebra' : '');
+        str += li;
     });
+    $('#lastprg').html(str);
+    $("#lastprg").listview();
+    $("#lastprg").listview('refresh');
 }
