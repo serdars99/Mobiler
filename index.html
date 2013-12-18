@@ -9,20 +9,28 @@
 </head>
 <body>
     <div data-role="page" id="main">
-        <div data-role="header" id="baseheader" data-theme="b">
-            <a href="#outside" data-icon="bars" data-iconpos="notext">Menu</a>
-            <h1>
-                Bahisör - <span id="mydata"></span>
-            </h1>
-            <a href="#" data-role="button" data-rel="back" data-icon="arrow-l" class="ui-btn-right">
-                Geri</a>
+        <div data-role="header" id="baseheader" data-theme="b" data-id="dfooter" data-position="fixed">
+            <div class="ui-bar">
+                <a href="#outside" data-icon="bars" data-iconpos="notext">Menu</a>
+                <h1>Bahisör - <span class="mydata"></span></h1>
+                <a href="#" data-role="button" data-rel="back" data-icon="arrow-l" class="ui-btn-right">Geri</a>
+            </div>
             <!--<a href="#" data-role="button" onclick="DeleteComment()" data-icon="star" class="ui-btn-icon-right ui-corner-all ui-mini ui-btn-right">Test</a>-->
             <!--<a href="#" class="ui-btn-right ui-btn ui-btn-inline ui-mini ui-corner-all ui-btn-icon-right">Kuponum</a>-->
         </div>
         <div id="home-content" data-role="content">
             <div class="chatTitle">
                 Günün Sohbeti</div>
-            <textarea id="usertxt"></textarea>
+            <div class="ui-grid-a">
+                <div class="ui-block-a" style="width: 75%">
+                    <textarea id="usertxt"></textarea></div>
+                <div class="ui-block-b" style="width: 5%">
+                </div>
+                <div class="ui-block-c" style="width: 20%">
+                    <button>
+                        Gönder</button>
+                </div>
+            </div>
             <ul data-role="listview" data-divider-theme="a" data-inset="true" id="lastchat" class="touch">
             </ul>
         </div>
@@ -40,10 +48,11 @@
                 </div>
             </div>
         </div>
-        <div data-role="footer" data-position="fixed" id="basefooter" data-id="dfooter">
+        <div data-role="footer" data-position="fixed" id="basefooter" data-id="dfooter" >
             <div data-role="navbar">
                 <ul id="footer">
-                    <li><a href="#main" data-icon="grid" data-theme="b" class="ui-btn-active ui-state-persist">Sohbet</a></li>
+                    <li><a href="#main" data-icon="grid" data-theme="b" class="ui-btn-active ui-state-persist">
+                        Sohbet</a></li>
                     <li><a href="#program" data-icon="grid" data-theme="b">Program</a></li>
                     <li><a href="#coupon" data-icon="grid" data-theme="b">Kupon</a></li>
                     <li><a href="#profile" data-icon="grid" data-theme="b">Profilim</a></li>
@@ -53,6 +62,13 @@
         </div>
     </div>
     <div data-role="page" id="program">
+        <div data-role="header" data-theme="b" data-id="dfooter" data-position="fixed">
+            <div class="ui-bar">
+                <a href="#outside" data-icon="bars" data-iconpos="notext">Menu</a>
+                <h1>Bahisör - <span class="mydata"></span></h1>
+                <a href="#" data-role="button" data-rel="back" data-icon="arrow-l" class="ui-btn-right">Geri</a>
+            </div>
+        </div>
         <div data-role="content">
             <div class="chatTitle">
                 Program</div>
@@ -63,7 +79,8 @@
             <div data-role="navbar">
                 <ul id="Ul1">
                     <li><a href="#main" data-icon="grid" data-theme="b">Sohbet</a></li>
-                    <li><a href="#program" data-icon="grid" data-theme="b" class="ui-btn-active ui-state-persist">Program</a></li>
+                    <li><a href="#program" data-icon="grid" data-theme="b" class="ui-btn-active ui-state-persist">
+                        Program</a></li>
                     <li><a href="#coupon" data-icon="grid" data-theme="b">Kupon</a></li>
                     <li><a href="#profile" data-icon="grid" data-theme="b">Profilim</a></li>
                     <li><a href="#others" data-icon="grid" data-theme="b">Diğer</a></li>
@@ -104,7 +121,8 @@
             <li class="#delclass" cid="#cid">
                 <!--<a href="index.html">-->
                 <!--<h2>#nick</h2>-->
-                <p>#ename</p>
+                <p>
+                    #ename</p>
                 <p class="ui-li-aside" style="position: static">
                     &nbsp;<strong class="urlnick" urlnick="#urlnick">#nick(#time)</strong>&nbsp;</p>
             </li>

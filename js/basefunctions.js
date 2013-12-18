@@ -65,7 +65,7 @@ $(document).on("pagecreate", function (event) {
     $("body > [data-role='panel'] [data-role='listview']").listview();
     //console.log(event.target.id);
     if (event.target.id != 'main' && event.target.id != 'loginDialog') {
-        $(event.target).prepend($('#baseheader')[0].outerHTML);
+//        $(event.target).prepend($('#baseheader')[0].outerHTML);
         //        $(event.target).append($('#basefooter')[0].outerHTML);
     }
 });
@@ -93,7 +93,7 @@ function ValidateCB(data) {
     else {
         isvalidmember = true;
         var jdata = JSON.parse(atob(decodeURIComponent(escape(data))));
-        $('#mydata').html(getmember().NickName + '(' + getmember().Credits + ' Puan)');
+        $('.mydata').html(getmember().NickName + '(' + getmember().Credits + '+'+ getmember().DailyLoan +' Puan)');
         $.mobile.changePage("#" + localStorage["redirpage"]);
     }
 }
@@ -116,6 +116,7 @@ function TryLoginCB(data) {
         setmember(data);
         $.mobile.changePage("#" + localStorage["redirpage"]);
         localStorage.removeItem("redirpage");
+        $('.mydata').html(getmember().NickName + '(' + getmember().Credits + '+' + getmember().DailyLoan + ' Puan)');
     }
     else
         alert('Yanlış kullanıcı adı veya şifre');
