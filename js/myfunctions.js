@@ -13,9 +13,8 @@
     refreshchat();
     chatinterval = setInterval("refreshchat()", 5000);
 }
-function refreshchat()
-{
-getajaxdata("RefreshChat", { lastcheckdate: moment(chatcheckdate).format("YYYY-MM-DD HH:mm:ss"), count: 10 }, PageChatCallBack, false, true);
+function refreshchat() {
+    getajaxdata("RefreshChat", { lastcheckdate: moment(chatcheckdate).format("YYYY-MM-DD HH:mm:ss"), count: 10 }, PageChatCallBack, false, true);
 }
 function PageChatCallBack(data) {
     if (data == undefined)
@@ -117,38 +116,77 @@ function senddailycomment() {
 function PageProgram() {
     var prgcheckdate = moment(new Date()).subtract('days', 1);
     var localprg = loadlocalitem("program");
-    if (localprg != null) {
+    if (localprg != null && moment(new Date()).diff(moment(localprg.lastdate), 'seconds') < 10) {
         prgcheckdate = moment(localprg.lastdate);
-        loadprogram(localprg.obj);
+        //console.log(moment(localprg.lastdate).format("YYYY-MM-DD HH:mm:ss"));
+        loadprogramfilters();
+        loadprogram();
     }
     else
         checkprogram(prgcheckdate);
 }
 function checkprogram(prgcheckdate) {
-    getajaxdata("GetProgram", { lastcheckdate: prgcheckdate.format("YYYY-MM-DD HH:mm:ss") }, function (data) {
+    getajaxdata("GetProgram", { fc: "ok", lastcheckdate: prgcheckdate.format("YYYY-MM-DD HH:mm:ss") }, function (data) {
         data = JSON.parse(data);
         var lastdate = moment(new Date(data.lastdate));
         savelocalitem("program", data, lastdate);
-        loadprogram(data);
+        loadprogramfilters();
+        loadprogram();
     }, false);
 }
-function loadprogram(data) {
-    $('#lastprg').html('');
+function loadprogramfilters() {
+    var data = loadlocalitem("program").obj;
+    $('#slcdate').html('');
+    $(data.dates).each(function () {
+        appendoption($('#slcdate'), this, this, false);
+    });
+    $('#slccomp').html('');
+    appendoption($('#slccomp'), "", "Turnuva", false);
+    $(data.comps).each(function () {
+        appendoption($('#slccomp'), this.cid, this.cn, false);
+    });
+    $('#slcdate').selectmenu("refresh", true);
+    $('#slccomp').selectmenu("refresh", true);
+}
+function loadprogram() {
+    var data = loadlocalitem("program").obj;
+    $("#tblprog > tbody").html('');
     var str = '';
     var deleters = '1,2';
-    var iszebra = false;
+    var betspan = "<span on='#on' tn='#tn' oid='#oid' rt='#rt'></span>";
     $(data.events).each(function () {
-        iszebra = !iszebra;
-        var li = $('#programhidden').html();
-        li = li.replace(/#ename/g, this.ename);
-//        li = li.replace(/#comment/g, fixlink(this.CommentText));
-//        li = li.replace(/#nick/g, this.NickName);
-//        li = li.replace(/#urlnick/g, this.NickName.replace(/ /g, '-'));
-//        li = li.replace(/#comment/g, this.CommentText);
-//        li = li.replace(/#zebra/g, iszebra ? 'zebra' : '');
-        str += li;
+        if (this.sid == $('#slcsport').val() && $('#slcdate').val() == moment(new Date(this.edate)).format("YYYY-MM-DD") && ($('#slccomp').val() == "" || $('#slccomp').val() == this.cid)) {
+            var li = $('#trproghelper')[0].outerHTML.replace(/tx/ig, 'tr').replace(/ty/ig, 'td');
+            li = li.replace(/#evid/g, this.id);
+            li = li.replace(/#evname/g, this.ename);
+            li = li.replace(/#time/g, moment(new Date(this.edate)).format("HH:mm"));
+            li = li.replace(/#code/g, this.code);
+            li = li.replace(/#mbs/g, this.mbs);
+
+            li = li.replace(/#o1/g, jQuery.grep(this.bets, function (bet) { return bet.oid == 1; })[0].rt);
+            li = li.replace(/#o0/g, jQuery.grep(this.bets, function (bet) { return bet.oid == 2; })[0].rt);
+            li = li.replace(/#o2/g, jQuery.grep(this.bets, function (bet) { return bet.oid == 3; })[0].rt);
+            var oa = jQuery.grep(this.bets, function (bet) { return bet.oid == 15; });
+            var ou = jQuery.grep(this.bets, function (bet) { return bet.oid == 16; });
+            if (oa.length > 0)
+                li = li.replace(/#oa/g, oa[0].rt);
+            else
+                li = li.replace(/#oa/g, '');
+            if (ou.length > 0)
+                li = li.replace(/#ou/g, ou[0].rt);
+            else
+                li = li.replace(/#ou/g, '');
+            var bets = '';
+            for (var i = 0; i < this.bets.length; i++)
+                bets += betspan.replace(/#on/ig, this.bets[i].on).replace(/#tn/ig, this.bets[i].tn).replace(/#oid/ig, this.bets[i].oid).replace(/#rt/ig, this.bets[i].rt);
+            li = li.replace(/#bets/ig, bets);
+
+            str += li;
+        }
     });
-    $('#lastprg').html(str);
-    $("#lastprg").listview();
-    $("#lastprg").listview('refresh');
+    $("#tblprog > tbody").append(str);
+    $("#tblprog").table("refresh");
+}
+function openbetdetails(evid) {
+    alert($('#bets' + evid).html());
 }

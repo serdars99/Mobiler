@@ -10,7 +10,8 @@
     line-height: 1px;
 }
 /* Left transition */
-li.left {
+li.left
+{
     -webkit-transition: -webkit-transform 250ms ease;
     -webkit-transform: translateX(-100%);
     -moz-transition: -moz-transform 250ms ease;
@@ -21,7 +22,8 @@ li.left {
     transform: translateX(-100%);
 }
 /* Right transition */
-li.right {
+li.right
+{
     -webkit-transition: -webkit-transform 250ms ease;
     -webkit-transform: translateX(100%);
     -moz-transition: -moz-transform 250ms ease;
@@ -32,25 +34,67 @@ li.right {
     transform: translateX(100%);
 }
 /* Border bottom for the previous button during the transition*/
-li.left a.ui-btn,
-li.right a.ui-btn {
+li.left a.ui-btn, li.right a.ui-btn
+{
     border-top-width: 0;
     border-left-width: 1px;
     border-right-width: 1px;
 }
-li a.ui-btn.border-bottom {
+li a.ui-btn.border-bottom
+{
     border-bottom-width: 1px;
 }
 /* Hide the delete button on touch devices */
-ul.touch li.ui-li-has-alt a.delete {
+ul.touch li.ui-li-has-alt a.delete
+{
     display: none;
 }
-ul.touch li.ui-li-has-alt a.ui-btn {
-    margin-right:0;
+ul.touch li.ui-li-has-alt a.ui-btn
+{
+    margin-right: 0;
 }
 /* Styling for the popup */
-#confirm p {
+#confirm p
+{
     text-align: center;
     font-size: inherit;
     margin-bottom: .75em;
+}
+/* These apply across all breakpoints because they are outside of a media query */
+/* Make the labels light gray all caps across the board */
+.movie-list
+{
+}
+.movie-list thead th, .movie-list tbody th .ui-table-cell-label, .movie-list tbody td
+{
+    text-transform: uppercase;
+    font-size: .7em;
+    color: rgba(0,0,0,0.5);
+    font-weight: normal;
+}
+.movie-list thead
+{
+    background-color:Gray;
+}
+.movie-list thead th
+{
+    color:white;
+}
+.movie-list tbody td a
+{
+    font-size: .66em;
+    font-weight: normal;
+}
+.ui-table-columntoggle-btn
+{
+    display: none;
+}
+.custom-border-radius
+{
+    -webkit-border-radius: .3125em;
+    border-radius: .3125em;
+}
+.ui-select 
+{
+    font-size: .60em;
 }

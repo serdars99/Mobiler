@@ -12,8 +12,9 @@
         <div data-role="header" id="baseheader" data-theme="b" data-id="dfooter" data-position="fixed">
             <div class="ui-bar">
                 <a href="#outside" data-icon="bars" data-iconpos="notext">Menu</a>
-                <h1>Bahisör - <span class="mydata"></span></h1>
-                <a href="#" data-role="button" data-rel="back" data-icon="arrow-l" class="ui-btn-right">Geri</a>
+                <h1>
+                    Bahisör - <span class="mydata"></span>
+                </h1>
             </div>
             <!--<a href="#" data-role="button" onclick="DeleteComment()" data-icon="star" class="ui-btn-icon-right ui-corner-all ui-mini ui-btn-right">Test</a>-->
             <!--<a href="#" class="ui-btn-right ui-btn ui-btn-inline ui-mini ui-corner-all ui-btn-icon-right">Kuponum</a>-->
@@ -21,16 +22,7 @@
         <div id="home-content" data-role="content">
             <div class="chatTitle">
                 Günün Sohbeti</div>
-            <div class="ui-grid-a">
-                <div class="ui-block-a" style="width: 75%">
-                    <textarea id="usertxt"></textarea></div>
-                <div class="ui-block-b" style="width: 5%">
-                </div>
-                <div class="ui-block-c" style="width: 20%">
-                    <button>
-                        Gönder</button>
-                </div>
-            </div>
+            <textarea id="usertxt"></textarea>
             <ul data-role="listview" data-divider-theme="a" data-inset="true" id="lastchat" class="touch">
             </ul>
         </div>
@@ -48,7 +40,7 @@
                 </div>
             </div>
         </div>
-        <div data-role="footer" data-position="fixed" id="basefooter" data-id="dfooter" >
+        <div data-role="footer" data-position="fixed" id="basefooter" data-id="dfooter">
             <div data-role="navbar">
                 <ul id="footer">
                     <li><a href="#main" data-icon="grid" data-theme="b" class="ui-btn-active ui-state-persist">
@@ -65,15 +57,77 @@
         <div data-role="header" data-theme="b" data-id="dfooter" data-position="fixed">
             <div class="ui-bar">
                 <a href="#outside" data-icon="bars" data-iconpos="notext">Menu</a>
-                <h1>Bahisör - <span class="mydata"></span></h1>
-                <a href="#" data-role="button" data-rel="back" data-icon="arrow-l" class="ui-btn-right">Geri</a>
+                <h1>
+                    Bahisör - <span class="mydata"></span>
+                </h1>
+                <a href="#" data-role="button" data-rel="back" data-icon="arrow-l" class="ui-btn-right">
+                    Geri</a>
             </div>
         </div>
         <div data-role="content">
-            <div class="chatTitle">
-                Program</div>
-            <ul data-role="listview" data-divider-theme="a" data-inset="true" id="lastprg" class="touch">
-            </ul>
+            <div class="ui-grid-b">
+                <div class="ui-block-a">
+                    <select id="slcsport" data-mini="true" onchange="loadprogram();">
+                        <option value="1">Futbol</option>
+                        <option value="2">Basketbol</option>
+                    </select></div>
+                <div class="ui-block-b">
+                    <select id="slcdate" data-mini="true" onchange="loadprogram();">
+                    </select>
+                </div>
+                <div class="ui-block-c">
+                    <select id="slccomp" data-mini="true" onchange="loadprogram();">
+                        <option value="">Turnuva</option>
+                    </select>
+                </div>
+            </div>
+            <table data-role="table" id="tblprog" data-mode="columntoggle" class="movie-list ui-body-d ui-shadow table-stripe ui-responsive">
+                <thead>
+                    <tr>
+                        <th data-priority="1">
+                        </th>
+                        <th data-priority="1">
+                        </th>
+                        <th data-priority="1">
+                        </th>
+                        <th data-priority="1">
+                        </th>
+                        <th data-priority="1">
+                            1
+                        </th>
+                        <th data-priority="1">
+                            X
+                        </th>
+                        <th data-priority="1">
+                            2
+                        </th>
+                        <th data-priority="2">
+                            2,5A
+                        </th>
+                        <th data-priority="2">
+                            2,5Ü
+                        </th>
+                        <th data-priority="1">
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+            <div id="betdetails" class="ui-content" data-role="popup" data-theme="a" data-history="false">
+                <p id="P1">
+                    Maçın Diğer Bahisleri</p>
+                <div class="ui-grid-a">
+                    <div class="ui-block-a">
+                        <a id="A1" data-role="button" data-mini="true" data-shadow="false" data-theme="a"
+                            data-rel="back">Yes</a>
+                    </div>
+                    <div class="ui-block-b">
+                        <a id="A2" data-role="button" data-mini="true" data-shadow="false" data-theme="a"
+                            data-rel="back">Cancel</a>
+                    </div>
+                </div>
+            </div>
         </div>
         <div data-role="footer" data-position="fixed" data-id="dfooter">
             <div data-role="navbar">
@@ -101,8 +155,10 @@
     <div data-role="panel" id="outside" data-theme="b">
         <ul data-role="listview">
             <li data-icon="back"><a href="#" data-rel="close">Kapat</a></li>
-            <li><a href="#" onclick="alert(2)">Reveal</a></li>
-            <li>index.html</li>
+            <li><a href="#" data-role="button" onclick="ResetLogin()" data-icon="arrow-l">Resetle</a></li>
+            <li><a href="#" data-role="button" onclick="alert(localStorage['currentversion']);">Versiyon</a></li>
+            <li><a href="#" data-role="button" onclick="$.mobile.loading('show');" >Loading</a></li>
+            <li><a href="#" data-role="button" onclick="$.mobile.loading('hide');" >EndLoading</a></li>
         </ul>
     </div>
     <div id="htmlhelpers" style="display: none">
@@ -127,6 +183,16 @@
                     &nbsp;<strong class="urlnick" urlnick="#urlnick">#nick(#time)</strong>&nbsp;</p>
             </li>
         </ul>
+        <tx id="trproghelper">
+            <ty>#time</ty><ty>#code</ty><ty>#mbs</ty><ty class="title"><a href="#evlink" data-rel="external">#evname</a>
+            </ty><ty>#o1</ty><ty>#o0</ty><ty>#o2</ty><ty>#oa</ty><ty>#ou</ty><ty>
+                <div class="custom-border-radius">
+                    <a href="#" onclick="openbetdetails(#evid)" class="ui-btn ui-icon-info ui-btn-icon-notext ui-corner-all">
+                    </a></div>
+                    <span id="bets#evid" style="display:none">#bets
+                    </span>
+                    </ty>
+                    </tx>
     </div>
     <!-- /popup -->
     <!--    <button onclick="trylogin()">

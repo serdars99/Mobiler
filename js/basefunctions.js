@@ -5,9 +5,16 @@ var defaulttext = 'Yazmak için tıklayın...';
 var chatcheckdate = moment(new Date()).subtract('days', 1);
 var chatinterval;
 var isvalidmember = false;
+var currentversion = 4;
 $(document).on("ready", function () {
     moment.lang('tr');
 });
+function appendoption(elm, value, text, selected) {
+    if (selected)
+        $(elm).append('<option value="' + value + '" selected="true">' + text + '</option>');
+    else
+        $(elm).append('<option value="' + value + '">' + text + '</option>');
+}
 function fixlink(str) {
     return str.replace(/href="\//ig, "href=\"" + siteurl);
 }
@@ -39,6 +46,10 @@ function setmember(data) {
     localStorage["member"] = data;
 }
 $(document).on("pageshow", function (event) {
+    if (localStorage["currentversion"] == null || localStorage["currentversion"] != currentversion) {
+        localStorage.clear();
+        localStorage["currentversion"] = currentversion;
+    }
     if (event.target.id == 'loginDialog') {
         $('#loginpass').off('keydown').on('keydown', function (e) {
             if (e.which == 13) { TryLogin(); }
@@ -93,7 +104,7 @@ function ValidateCB(data) {
     else {
         isvalidmember = true;
         var jdata = JSON.parse(atob(decodeURIComponent(escape(data))));
-        $('.mydata').html(getmember().NickName + '(' + getmember().Credits + '+'+ getmember().DailyLoan +' Puan)');
+        $('.mydata').html(getmember().NickName + '(' + getmember().Credits + '+'+ getmember().DailyLoan +' P)');
         $.mobile.changePage("#" + localStorage["redirpage"]);
     }
 }
@@ -105,7 +116,7 @@ function TryLogin() {
     getajaxdata("Login", { nick: $('#loginnick').val(), pass: $('#loginpass').val() }, TryLoginCB, false, true);
 }
 function ResetLogin() {
-    localStorage.removeItem("member");
+    localStorage.clear();
     alert("login info has been deleted");
 }
 function TryLoginCB(data) {
@@ -116,7 +127,7 @@ function TryLoginCB(data) {
         setmember(data);
         $.mobile.changePage("#" + localStorage["redirpage"]);
         localStorage.removeItem("redirpage");
-        $('.mydata').html(getmember().NickName + '(' + getmember().Credits + '+' + getmember().DailyLoan + ' Puan)');
+        $('.mydata').html(getmember().NickName + '(' + getmember().Credits + '+' + getmember().DailyLoan + ' P)');
     }
     else
         alert('Yanlış kullanıcı adı veya şifre');
