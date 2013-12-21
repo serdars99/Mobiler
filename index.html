@@ -114,19 +114,16 @@
                 <tbody>
                 </tbody>
             </table>
-            <div id="betdetails" class="ui-content" data-role="popup" data-theme="a" data-history="false">
+            <div id="betdetails" class="ui-content" data-role="popup" data-theme="a" data-history="false"
+                data-transition="flip">
+                <a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete"
+                    data-iconpos="notext" class="ui-btn-right">Kapat</a>
                 <p id="P1">
                     Maçın Diğer Bahisleri</p>
-                <div class="ui-grid-a">
-                    <div class="ui-block-a">
-                        <a id="A1" data-role="button" data-mini="true" data-shadow="false" data-theme="a"
-                            data-rel="back">Yes</a>
-                    </div>
-                    <div class="ui-block-b">
-                        <a id="A2" data-role="button" data-mini="true" data-shadow="false" data-theme="a"
-                            data-rel="back">Cancel</a>
-                    </div>
-                </div>
+                    <div id="tables"></div>
+<!--                <ul data-role="listview" data-inset="true" data-divider-theme="a" id="listviewid"
+                    data-mini="true">
+                </ul>-->
             </div>
         </div>
         <div data-role="footer" data-position="fixed" data-id="dfooter">
@@ -156,17 +153,16 @@
         <ul data-role="listview">
             <li data-icon="back"><a href="#" data-rel="close">Kapat</a></li>
             <li><a href="#" data-role="button" onclick="ResetLogin()" data-icon="arrow-l">Resetle</a></li>
-            <li><a href="#" data-role="button" onclick="alert(localStorage['currentversion']);">Versiyon</a></li>
-            <li><a href="#" data-role="button" onclick="$.mobile.loading('show');" >Loading</a></li>
-            <li><a href="#" data-role="button" onclick="$.mobile.loading('hide');" >EndLoading</a></li>
+            <li><a href="#" data-role="button" onclick="alert(localStorage['currentversion']);">
+                Versiyon</a></li>
+            <li><a href="#" data-role="button" onclick="$.mobile.loading('show');">Loading</a></li>
+            <li><a href="#" data-role="button" onclick="$.mobile.loading('hide');">EndLoading</a></li>
         </ul>
     </div>
     <div id="htmlhelpers" style="display: none">
         <!--<li data-role="list-divider">Friday, October 8, 2010 <span class="ui-li-count">2</span></li>-->
         <ul id="maincommentsx">
             <li class="#delclass" cid="#cid">
-                <!--<a href="index.html">-->
-                <!--<h2>#nick</h2>-->
                 <p>
                     #comment</p>
                 <p class="ui-li-aside" style="position: static">
@@ -175,8 +171,6 @@
         </ul>
         <ul id="programhidden">
             <li class="#delclass" cid="#cid">
-                <!--<a href="index.html">-->
-                <!--<h2>#nick</h2>-->
                 <p>
                     #ename</p>
                 <p class="ui-li-aside" style="position: static">

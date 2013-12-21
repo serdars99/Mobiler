@@ -8,6 +8,15 @@ var isvalidmember = false;
 var currentversion = 4;
 $(document).on("ready", function () {
     moment.lang('tr');
+    jQuery.ajaxSetup({
+        beforeSend: function () {
+            $.mobile.loading('show');
+        },
+        complete: function () {
+            $.mobile.loading('hide');
+        },
+        success: function () { $.mobile.loading('hide');  }
+    });
 });
 function appendoption(elm, value, text, selected) {
     if (selected)
