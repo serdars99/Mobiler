@@ -15,8 +15,10 @@ $(document).on("ready", function () {
         complete: function () {
             $.mobile.loading('hide');
         },
-        success: function () { $.mobile.loading('hide');  }
+        success: function () { $.mobile.loading('hide'); }
     });
+    if (localStorage["bettypes"] == null)
+        getajaxdata("GetBetTypes", null, function (data) { var jdata = JSON.parse(data); localStorage["bettypes"] = data; }, false, true, true);
 });
 function appendoption(elm, value, text, selected) {
     if (selected)
@@ -78,6 +80,7 @@ $(document).on("pageshow", function (event) {
     if (getmember() != null && isvalidmember) {
         if (event.target.id == 'main') PageChat();
         else if (event.target.id == 'program') PageProgram();
+        else if (event.target.id == 'coupon') PageCoupon(); 
     }
 });
 $(document).on("pagecreate", function (event) {
@@ -140,4 +143,86 @@ function TryLoginCB(data) {
     }
     else
         alert('Yanlış kullanıcı adı veya şifre');
+}
+
+function GetPerm(n1, n2) {
+    return GetPermSingle(n1) / (GetPermSingle(n2) * GetPermSingle((n1 - n2)));
+}
+function GetPermSingle(n1) {
+    var res = 1;
+    while (n1 > 1) {
+        res *= n1;
+        n1--;
+    }
+    return res;
+}
+function getrandomcombination(itemsize, itemcount) {
+    var setcount = GetPerm(itemsize, itemcount);
+    var allnumbersets = new Array();
+    while (allnumbersets.length < setcount) {
+        var numberset = new Array();
+        while (numberset.length < itemcount) {
+            var number = Math.floor((Math.random() * itemsize));
+            if (numberset.indexOf(number) == -1)
+                numberset.push(number);
+        }
+        numberset.sort();
+        var isexist = false;
+        for (var i = 0; i < allnumbersets.length; i++) {
+            if (isarraysequal(allnumbersets[i], numberset)) {
+                isexist = true;
+                break;
+            }
+        }
+        if (isexist)
+            continue;
+        else
+            allnumbersets.push(numberset);
+    }
+    return allnumbersets;
+}
+function isarraysequal(ar1, ar2) {
+    var ec = 0;
+    for (var i = 0; i < ar1.length; i++)
+        if (ar1[i] == ar2[i])
+            ec++;
+    if (ec == ar1.length)
+        return true;
+    else
+        return false;
+}
+function GetSystemBets(couponjson) {
+    var allsys = { ratio: 0, winning: 0, couponcount: 0, allsystems: new Array() };
+    var bankocbs = jQuery.grep(couponjson.bets, function (bet) { return bet.isbanko; });
+    var notbankocbs = jQuery.grep(couponjson.bets, function (bet) { return !bet.isbanko; });
+    var notbankocount = notbankocbs.length;
+    allsys.ratio = 0;
+    allsys.winning = 0;
+    allsys.couponcount = 0;
+    for (var i = 0; i < couponjson.systems.length; i++) {
+        var systemsallbets = { systems: new Array(), systemno: couponjson.systems[i], ratio: 0, winning: 0 };
+        var combs = getrandomcombination(notbankocount, couponjson.systems[i]);
+        for (var j = 0; j < combs.length; j++) {
+            var betsholder = { systembets: new Array(), ratio: 1 };
+            for (var k = 0; k < bankocbs.length; k++) {
+                betsholder.systembets.push({ SystemID: couponjson.systems, Ratio: bankocbs[k].rt });
+                betsholder.ratio *= bankocbs[k].rt;
+            }
+            for (var k = 0; k < combs[j].length; k++) {
+                var ibet = notbankocbs[combs[j][k]];
+                betsholder.systembets.push({ SystemID: couponjson.systems, Ratio: ibet.rt });
+                betsholder.ratio *= ibet.rt;
+            }
+            betsholder.winning = betsholder.ratio * couponjson.stake;
+            systemsallbets.systems.push(betsholder);
+            systemsallbets.ratio += betsholder.ratio;
+            systemsallbets.winning += betsholder.ratio * couponjson.stake;
+        }
+        allsys.allsystems.push(systemsallbets);
+        allsys.ratio += systemsallbets.ratio;
+        allsys.winning += systemsallbets.winning;
+        allsys.couponcount += combs.length;
+    }
+    console.log(allsys);
+    return allsys;
 }

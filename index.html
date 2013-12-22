@@ -16,8 +16,6 @@
                     Bahisör - <span class="mydata"></span>
                 </h1>
             </div>
-            <!--<a href="#" data-role="button" onclick="DeleteComment()" data-icon="star" class="ui-btn-icon-right ui-corner-all ui-mini ui-btn-right">Test</a>-->
-            <!--<a href="#" class="ui-btn-right ui-btn ui-btn-inline ui-mini ui-corner-all ui-btn-icon-right">Kuponum</a>-->
         </div>
         <div id="home-content" data-role="content">
             <div class="chatTitle">
@@ -120,8 +118,9 @@
                     data-iconpos="notext" class="ui-btn-right">Kapat</a>
                 <p id="P1">
                     Maçın Diğer Bahisleri</p>
-                    <div id="tables"></div>
-<!--                <ul data-role="listview" data-inset="true" data-divider-theme="a" id="listviewid"
+                <div id="tables">
+                </div>
+                <!--                <ul data-role="listview" data-inset="true" data-divider-theme="a" id="listviewid"
                     data-mini="true">
                 </ul>-->
             </div>
@@ -134,6 +133,187 @@
                         Program</a></li>
                     <li><a href="#coupon" data-icon="grid" data-theme="b">Kupon</a></li>
                     <li><a href="#profile" data-icon="grid" data-theme="b">Profilim</a></li>
+                    <li><a href="#others" data-icon="grid" data-theme="b">Diğer</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div data-role="page" id="coupon">
+        <div data-role="header" data-theme="b" data-id="dfooter" data-position="fixed">
+            <div class="ui-bar">
+                <a href="#outside" data-icon="bars" data-iconpos="notext">Menu</a>
+                <h1>
+                    Bahisör - <span class="mydata"></span>
+                </h1>
+                <a href="#" data-role="button" data-rel="back" data-icon="arrow-l" class="ui-btn-right">
+                    Geri</a>
+            </div>
+        </div>
+        <div data-role="content">
+            <a href="#" onclick="ClearCoupon()" class="ui-btn">Kuponu Temizle</a>
+            <!--<a href="#" onclick="setsys()" class="ui-btn">setsys</a>-->
+            <table data-role="table" id="tblcoupon" data-mode="columntoggle" class="movie-list ui-body-d ui-shadow table-stripe ui-responsive">
+                <thead>
+                    <tr>
+                        <th data-priority="1">
+                            Tarih
+                        </th>
+                        <th data-priority="1">
+                            Kod
+                        </th>
+                        <th data-priority="1">
+                            MBS
+                        </th>
+                        <th data-priority="1">
+                            Maç
+                        </th>
+                        <th data-priority="1">
+                            Bahis
+                        </th>
+                        <th data-priority="1">
+                            Oran
+                        </th>
+                        <th data-priority="1">
+                        </th>
+                        <th data-priority="1">
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+            <div class="ui-bar">
+             <div class="ui-field-contain">
+                <label>
+                    Sistem:</label>
+                <div data-role="controlgroup" id="systems" data-type="horizontal" data-mini="true">
+                </div>
+                </div>
+            </div>
+            <!--                                <div data-role="controlgroup" id="systems2" data-type="horizontal" data-mini="true">
+                                <a href="#" onclick="SendCoupon()" class="ui-btn ui-mini" >Gönder</a>
+                                <a href="#" onclick="SendCoupon()" class="ui-btn ui-mini" >Gönder</a>
+                    </div>-->
+            <div class="ui-grid-c">
+                <div class="ui-block-a">
+                    <div class="ui-field-contain">
+                        <label for="slcstake">
+                            Misli:</label>
+                        <select id="slcstake" name="slcstake" data-mini="true" onchange="changestake();">
+                        </select>
+                    </div>
+                </div>
+                <div class="ui-block-b">
+                    <div class="ui-field-contain">
+                        Oran:<span id="spnratio"></span></div>
+                </div>
+                <div class="ui-block-c">
+                    <div class="ui-field-contain">
+                        Kazanç:<span id="spnwin"></span></div>
+                </div>
+                <div class="ui-block-c">
+                    <div class="ui-field-contain">
+                        Kol.Sayısı:<span id="spncount"></span></div>
+                </div>
+            </div>
+            <a href="#" onclick="SendCoupon()" class="ui-btn">Gönder</a>
+        </div>
+        <div data-role="footer" data-position="fixed" data-id="dfooter">
+            <div data-role="navbar">
+                <ul id="Ul2">
+                    <li><a href="#main" data-icon="grid" data-theme="b">Sohbet</a></li>
+                    <li><a href="#program" data-icon="grid" data-theme="b">Program</a></li>
+                    <li><a href="#coupon" data-icon="grid" data-theme="b" class="ui-btn-active ui-state-persist">
+                        Kupon</a></li>
+                    <li><a href="#profile" data-icon="grid" data-theme="b">Profilim</a></li>
+                    <li><a href="#others" data-icon="grid" data-theme="b">Diğer</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div data-role="page" id="profile">
+        Profile
+        <div data-role="header" data-theme="b" data-id="dfooter" data-position="fixed">
+            <div class="ui-bar">
+                <a href="#outside" data-icon="bars" data-iconpos="notext">Menu</a>
+                <h1>
+                    Bahisör - <span class="mydata"></span>
+                </h1>
+                <a href="#" data-role="button" data-rel="back" data-icon="arrow-l" class="ui-btn-right">
+                    Geri</a>
+            </div>
+        </div>
+        <div data-role="content">
+            <div class="ui-grid-b">
+                <div class="ui-block-a">
+                    <select id="Select4" data-mini="true" onchange="loadprogram();">
+                        <option value="1">Futbol</option>
+                        <option value="2">Basketbol</option>
+                    </select></div>
+                <div class="ui-block-b">
+                    <select id="Select5" data-mini="true" onchange="loadprogram();">
+                    </select>
+                </div>
+                <div class="ui-block-c">
+                    <select id="Select6" data-mini="true" onchange="loadprogram();">
+                        <option value="">Turnuva</option>
+                    </select>
+                </div>
+            </div>
+            <table data-role="table" id="Table2" data-mode="columntoggle" class="movie-list ui-body-d ui-shadow table-stripe ui-responsive">
+                <thead>
+                    <tr>
+                        <th data-priority="1">
+                        </th>
+                        <th data-priority="1">
+                        </th>
+                        <th data-priority="1">
+                        </th>
+                        <th data-priority="1">
+                        </th>
+                        <th data-priority="1">
+                            1
+                        </th>
+                        <th data-priority="1">
+                            X
+                        </th>
+                        <th data-priority="1">
+                            2
+                        </th>
+                        <th data-priority="2">
+                            2,5A
+                        </th>
+                        <th data-priority="2">
+                            2,5Ü
+                        </th>
+                        <th data-priority="1">
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+            <div id="Div4" class="ui-content" data-role="popup" data-theme="a" data-history="false"
+                data-transition="flip">
+                <a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete"
+                    data-iconpos="notext" class="ui-btn-right">Kapat</a>
+                <p id="P3">
+                    Maçın Diğer Bahisleri</p>
+                <div id="Div5">
+                </div>
+                <!--                <ul data-role="listview" data-inset="true" data-divider-theme="a" id="listviewid"
+                    data-mini="true">
+                </ul>-->
+            </div>
+        </div>
+        <div data-role="footer" data-position="fixed" data-id="dfooter">
+            <div data-role="navbar">
+                <ul id="Ul3">
+                    <li><a href="#main" data-icon="grid" data-theme="b">Sohbet</a></li>
+                    <li><a href="#program" data-icon="grid" data-theme="b">Program</a></li>
+                    <li><a href="#coupon" data-icon="grid" data-theme="b">Kupon</a></li>
+                    <li><a href="#profile" data-icon="grid" data-theme="b" class="ui-btn-active ui-state-persist">
+                        Profilim</a></li>
                     <li><a href="#others" data-icon="grid" data-theme="b">Diğer</a></li>
                 </ul>
             </div>
@@ -155,8 +335,6 @@
             <li><a href="#" data-role="button" onclick="ResetLogin()" data-icon="arrow-l">Resetle</a></li>
             <li><a href="#" data-role="button" onclick="alert(localStorage['currentversion']);">
                 Versiyon</a></li>
-            <li><a href="#" data-role="button" onclick="$.mobile.loading('show');">Loading</a></li>
-            <li><a href="#" data-role="button" onclick="$.mobile.loading('hide');">EndLoading</a></li>
         </ul>
     </div>
     <div id="htmlhelpers" style="display: none">
@@ -177,7 +355,7 @@
                     &nbsp;<strong class="urlnick" urlnick="#urlnick">#nick(#time)</strong>&nbsp;</p>
             </li>
         </ul>
-        <tx id="trproghelper">
+        <tx id="trproghelper" class="tx#evid" edate="#edate" sid="#sid">
             <ty>#time</ty><ty>#code</ty><ty>#mbs</ty><ty class="title"><a href="#evlink" data-rel="external">#evname</a>
             </ty><ty>#o1</ty><ty>#o0</ty><ty>#o2</ty><ty>#oa</ty><ty>#ou</ty><ty>
                 <div class="custom-border-radius">
@@ -187,6 +365,9 @@
                     </span>
                     </ty>
                     </tx>
+        <tx id="trcouponhelper" class="tx#evid" edate="#edate" sid="#sid">
+            <ty>#time</ty><ty>#code</ty><ty>#mbs</ty><ty class="title"><a href="#evlink" data-rel="external">#evname</a>
+            </ty><ty>#bet</ty><ty>#rt</ty><ty>#bnk</ty><ty>#del</ty></tx>
     </div>
     <!-- /popup -->
     <!--    <button onclick="trylogin()">

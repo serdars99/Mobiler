@@ -152,12 +152,14 @@ function loadprogramfilters() {
     $('#slcdate').selectmenu("refresh", true);
     $('#slccomp').selectmenu("refresh", true);
 }
+//var key = "one";
+//delete someObj[key];
 function loadprogram() {
     var data = loadlocalitem("program").obj;
     $("#tblprog > tbody").html('');
     var str = '';
     var deleters = '1,2';
-    var betspan = "<span on='#on' tn='#tn' oid='#oid' rt='#rt'></span>";
+    var betspan = "<span tid='#tid' oid='#oid' rt='#rt'></span>";
     $(data.events).each(function () {
         if (this.sid == $('#slcsport').val() && $('#slcdate').val() == moment(this.edate).format("YYYY-MM-DD") && ($('#slccomp').val() == "" || $('#slccomp').val() == this.cid)) {
             var li = $('#trproghelper')[0].outerHTML.replace(/tx/ig, 'tr').replace(/ty/ig, 'td');
@@ -166,27 +168,29 @@ function loadprogram() {
             li = li.replace(/#time/g, moment(new Date(this.edate)).format("HH:mm"));
             li = li.replace(/#code/g, this.code);
             li = li.replace(/#mbs/g, this.mbs);
+            li = li.replace(/#edate/g, this.edate);
+            li = li.replace(/#sid/g, this.sid);
 
-            var addoption = '<a href="#" onclick="AddToCoupon(#id,#oid)" class="ui-btn ui-mini" >#rt</a>'.replace(/#id/, this.id);
+            var addoption = '<a href="#" onclick="AddToCoupon(#id,#oid,#rt)" class="bt#oid ui-btn ui-mini" >#rt</a>'.replace(/#id/, this.id);
             var o1 = jQuery.grep(this.bets, function (bet) { return bet.oid == 1; })[0].rt;
             var o0 = jQuery.grep(this.bets, function (bet) { return bet.oid == 2; })[0].rt;
             var o2 = jQuery.grep(this.bets, function (bet) { return bet.oid == 3; })[0].rt;
-            li = li.replace(/#o1/g, addoption.replace(/#oid/, 1).replace(/#rt/, o1));
-            li = li.replace(/#o0/g, addoption.replace(/#oid/, 2).replace(/#rt/, o0));
-            li = li.replace(/#o2/g, addoption.replace(/#oid/, 3).replace(/#rt/, o2));
+            li = li.replace(/#o1/g, addoption.replace(/#oid/ig, 1).replace(/#rt/ig, o1));
+            li = li.replace(/#o0/g, addoption.replace(/#oid/ig, 2).replace(/#rt/ig, o0));
+            li = li.replace(/#o2/g, addoption.replace(/#oid/ig, 3).replace(/#rt/ig, o2));
             var oa = jQuery.grep(this.bets, function (bet) { return bet.oid == 15; });
             var ou = jQuery.grep(this.bets, function (bet) { return bet.oid == 16; });
             if (oa.length > 0)
-                li = li.replace(/#oa/g, addoption.replace(/#oid/, 15).replace(/#rt/, oa[0].rt));
+                li = li.replace(/#oa/g, addoption.replace(/#oid/ig, 15).replace(/#rt/ig, oa[0].rt));
             else
                 li = li.replace(/#oa/g, '');
             if (ou.length > 0)
-                li = li.replace(/#ou/g, addoption.replace(/#oid/, 16).replace(/#rt/, ou[0].rt));
+                li = li.replace(/#ou/g, addoption.replace(/#oid/ig, 16).replace(/#rt/ig, ou[0].rt));
             else
                 li = li.replace(/#ou/g, '');
             var bets = '';
             for (var i = 0; i < this.bets.length; i++)
-                bets += betspan.replace(/#on/ig, this.bets[i].on).replace(/#tn/ig, this.bets[i].tn).replace(/#oid/ig, this.bets[i].oid).replace(/#rt/ig, this.bets[i].rt);
+                bets += betspan.replace(/#oid/ig, this.bets[i].oid).replace(/#rt/ig, this.bets[i].rt).replace(/#tid/ig, this.bets[i].tid);
             li = li.replace(/#bets/ig, bets);
 
             str += li;
@@ -194,34 +198,41 @@ function loadprogram() {
     });
     $("#tblprog > tbody").append(str);
     $("#tblprog").table("refresh");
-}
-function AddToCoupon(evid, oid) {
-    alert(evid + "-" + oid);
+
+    if (localStorage["coupon"] != null) {
+        var json = JSON.parse(localStorage["coupon"]);
+        for (var i = 0; i < json.bets.length; i++)
+            $('.tr' + json.bets[i].evid + ' .bt' + json.bets[i].oid).addClass('ui-btn-active');
+    }
 }
 function openbetdetails(evid) {
+    var bettypes = JSON.parse(localStorage["bettypes"]);
     var bets = $('#bets' + evid).children();
     var types = new Array();
-    for (var i = 0; i < bets.length; i++)
-        if (types.indexOf($(bets[i]).attr('tn')) == -1) {
-            types.push($(bets[i]).attr('tn'));
-        }
+    for (var i = 0; i < bets.length; i++) {
+        var tid = jQuery.grep(bettypes, function (bet) { return bet.oid == $(bets[i]).attr('oid'); });
+        if (types.indexOf(tid[0].tid) == -1)
+            types.push(tid[0].tid);
+    }
     var str = '';
     for (var i = 0; i < types.length; i++) {
-        var opts = jQuery.grep(bets, function (bet) { return $(bet).attr('tn') == types[i]; });
+        var opts = jQuery.grep(bets, function (bet) { return $(bet).attr('tid') == types[i]; });
         var tbl = '<table data-role="table" data-mode="columntoggle" class="movie-list gtbl"><thead><tr><th colspan="#cnt">#tn</th></tr></thead><tbody>#opts</tbody></table>';
+        var ltype = jQuery.grep(bettypes, function (bet) { return bet.tid == types[i]; });
         if (opts.length > 7)
-            tbl = tbl.replace(/#cnt/, 7).replace(/#tn/, types[i]);
+            tbl = tbl.replace(/#cnt/, 7).replace(/#tn/, ltype[0].sname);
         else
-            tbl = tbl.replace(/#cnt/, opts.length).replace(/#tn/, types[i]);
+            tbl = tbl.replace(/#cnt/, opts.length).replace(/#tn/, ltype[0].sname);
         var tds = '';
         var tds2 = '';
         var tds3 = '';
         var tds4 = '';
         var tds5 = '';
         var tds6 = '';
-        
+
         for (var j = 0; j < opts.length; j++) {
-            var td = '<td><a href="#" class="ui-btn ui-mini" onclick="AddToCoupon(#id,#oid)">#on(#rt)</a></td>'.replace(/#on/, $(opts[j]).attr('on')).replace(/#rt/, $(opts[j]).attr('rt')).replace(/#id/, evid).replace(/#oid/, $(opts[j]).attr('oid'));
+            var lopt = jQuery.grep(bettypes, function (bet) { return bet.oid == $(opts[j]).attr('oid'); });
+            var td = '<td><a href="#" class="bt#oid ui-btn ui-mini" onclick="AddToCoupon(#evid,#oid,#rt)">#on(#rt)</a></td>'.replace(/#on/, lopt[0].oname).replace(/#rt/ig, $(opts[j]).attr('rt')).replace(/#evid/, evid).replace(/#oid/ig, $(opts[j]).attr('oid'));
             if (j < 7)
                 tds += td;
             else if (j < 14)
@@ -251,4 +262,187 @@ function openbetdetails(evid) {
     $('#betdetails #tables').html(str);
     $('#betdetails #tables .gtbl').table();
     $('#betdetails').popup('open');
+}
+function ClearCoupon() {
+    if (localStorage["coupon"] != null)
+        delete localStorage["coupon"];
+    LoadCoupon();
+}
+function RefreshCoupon(couponjson) {
+    var rt = 1;
+    var mbs = 0;
+    for (var i = 0; i < couponjson.bets.length; i++) {
+        var bt = couponjson.bets[i];
+        rt *= bt.rt;
+        if (bt.mbs > mbs)
+            mbs = bt.mbs;
+    }
+    couponjson.mbs = mbs;
+    couponjson.rt = rt;
+    couponjson.count = 1;
+    couponjson.totalwin = couponjson.stake * couponjson.rt;
+    couponjson.cost = couponjson.stake * couponjson.count;
+    var bankocount = jQuery.grep(couponjson.bets, function (bet) { return bet.isbanko });
+    var maxsys = couponjson.bets.length - bankocount.length;
+    var minsys = couponjson.mbs;
+
+    couponjson.systems = jQuery.grep(couponjson.systems, function (bet) { return bet <= maxsys });
+
+    var sysstr = '';
+    var btn = '<a href="#" class="ui-btn ui-mini #lastchild" onclick="SwitchSys(this,#sysno)" id="sys#sysno">#sysno</a>';
+
+    if (minsys <= maxsys)
+        for (var i = minsys; i <= maxsys; i++)
+            sysstr += btn.replace(/#sysno/ig, i).replace(/#lastchild/ig, i==maxsys?"ui-last-child":"");
+
+    $('#systems').html('<div class="ui-controlgroup-controls ">'+sysstr+'</div>');
+    $('#systems').controlgroup('refresh');
+
+    for (var i = 0; i < couponjson.systems.length; i++)
+        $('#sys' + couponjson.systems[i]).toggleClass('ui-btn-active');
+
+    if (couponjson.systems.length == 0)
+        couponjson.issys = false;
+
+    if (couponjson.issys) {
+        var combs = GetSystemBets(couponjson);
+        couponjson.rt = combs.ratio;
+        couponjson.totalwin = combs.winning;
+        couponjson.count = combs.couponcount;
+    }
+    localStorage["coupon"] = JSON.stringify(couponjson);
+    return couponjson;
+}
+function setsys() {
+    var couponjson = JSON.parse(localStorage["coupon"]);
+    couponjson.issys = true;
+    couponjson.systems.push(3);
+    localStorage["coupon"] = JSON.stringify(couponjson);
+    console.log(couponjson);
+}
+function AddToCoupon(evid, oid, rt) {
+    //var isremove = $(btn).hasClass('ui-btn-active');
+    var localcoupon = localStorage["coupon"];
+    var couponjson;
+    if (localcoupon == null)
+        couponjson = {
+            bets: new Array(), rt: 0, issys: false, systems: new Array(), mbs: 0, stake: 2, count: 1, cost: 0, totalwin: 0
+        };
+    else
+        couponjson = JSON.parse(localcoupon);
+
+    var existingbet = jQuery.grep(couponjson.bets, function (bet) { return bet.evid == evid && bet.oid == oid; });
+    var isremove = existingbet.length > 0;
+
+    var filteredbets = jQuery.grep(couponjson.bets, function (bet) { return bet.evid != evid; });
+    couponjson.bets = filteredbets;
+    var trcp = $('.tr' + evid).children();
+    //$('.tr9927').children().eq(3).children('a').html()
+    if (!isremove)
+        couponjson.bets.push({ oid: oid, evid: evid, name: $(trcp[3]).children('a').html(), mbs: $(trcp[2]).html(), code: $(trcp[1]).html(), time: trcp.parent().attr('edate')
+        , sid: trcp.parent().attr('sid'), isbanko: false, rt: rt
+        });
+
+    couponjson = RefreshCoupon(couponjson);
+    console.log(couponjson);
+    localStorage["coupon"] = JSON.stringify(couponjson);
+
+    if ($('#betdetails .ui-btn').length > 0)
+        $('#betdetails .ui-btn').removeClass('ui-btn-active');
+    $('.tr' + evid + ' .ui-btn').removeClass('ui-btn-active');
+
+    if (!isremove) {
+        $('.tr' + evid + ' .bt' + oid).addClass('ui-btn-active');
+        if ($('#betdetails .ui-btn').length > 0)
+            $('#betdetails .bt' + oid).addClass('ui-btn-active');
+    }
+}
+function PageCoupon() {
+    if ($('#slcstake option').length == 0) {
+        for (var i = 1; i < 961; i++)
+            appendoption($('#slcstake'), i, i, false);
+        $('#slcstake').selectmenu("refresh", true);
+    }
+    LoadCoupon();
+}
+function changestake(elm, evid) {
+    var jsoncoupon = JSON.parse(localStorage["coupon"]);
+    jsoncoupon.stake = parseInt($('#slcstake').val());
+    localStorage["coupon"] = JSON.stringify(jsoncoupon);
+    RefreshCoupon(jsoncoupon);
+    LoadCoupon();
+}
+function SwitchSys(elm, sysno) {
+    var jsoncoupon = JSON.parse(localStorage["coupon"]);
+    var existing = jQuery.grep(jsoncoupon.systems, function (bet) { return bet == sysno; });
+    if (existing.length > 0) 
+        jsoncoupon.systems = jQuery.grep(jsoncoupon.systems, function (bet) { return bet != sysno; });
+    else 
+        jsoncoupon.systems.push(sysno);
+
+    jsoncoupon.issys = jsoncoupon.systems > 0;  
+    localStorage["coupon"] = JSON.stringify(jsoncoupon);
+    RefreshCoupon(jsoncoupon);
+    $(elm).toggleClass('ui-btn-active');
+}
+function SwitchBanko(elm, evid) {
+    var jsoncoupon = JSON.parse(localStorage["coupon"]);
+    var isremove = false;
+    for (var i = 0; i < jsoncoupon.bets.length; i++)
+        if (jsoncoupon.bets[i].evid == evid) {
+            isremove = jsoncoupon.bets[i].isbanko;
+            jsoncoupon.bets[i].isbanko = !jsoncoupon.bets[i].isbanko;
+        }
+
+    localStorage["coupon"] = JSON.stringify(jsoncoupon);
+    RefreshCoupon(jsoncoupon);
+    $(elm).toggleClass('ui-btn-active');
+}
+function DeleteBet(evid) {
+    var jsoncoupon = JSON.parse(localStorage["coupon"]);
+    jsoncoupon.bets = jQuery.grep(jsoncoupon.bets, function (bet) { return bet.evid != evid; });
+    localStorage["coupon"] = JSON.stringify(jsoncoupon);
+    RefreshCoupon(jsoncoupon);
+    LoadCoupon();
+}
+function LoadCoupon() {
+    $("#tblcoupon > tbody").html('');
+    var data = localStorage["coupon"];
+    if (data == null)
+        return;
+    data = JSON.parse(data);
+    if (data.bets.length == 0)
+        return;
+    var deleter = '<a href="#" onclick="DeleteBet(#evid)" class="ui-btn ui-mini" >Sil</a>';
+    var bnkbtn = '<a href="#" onclick="SwitchBanko(this,#evid)" class="ui-btn ui-mini #act" >Banko</a>';
+    var str = '';
+    var bettypes = JSON.parse(localStorage["bettypes"]);
+
+    $(data.bets).each(function () {
+        var li = $('#trcouponhelper')[0].outerHTML.replace(/tx/ig, 'tr').replace(/ty/ig, 'td');
+        var oid = this.oid;
+        var betdet = jQuery.grep(bettypes, function (bet) { return bet.oid == oid; });
+        li = li.replace(/#bet/g, betdet[0].tname + ':' + betdet[0].oname);
+        li = li.replace(/#evname/g, this.name);
+        li = li.replace(/#time/g, moment(new Date(this.time)).format("DD.MM.YY HH:mm"));
+        li = li.replace(/#code/g, this.code);
+        li = li.replace(/#mbs/g, this.mbs);
+        li = li.replace(/#rt/g, this.rt);
+        li = li.replace(/#bnk/g, bnkbtn.replace(/#evid/ig, this.evid).replace(/#act/ig, this.isbanko ? "ui-btn-active" : ""));
+        li = li.replace(/#del/g, deleter.replace(/#evid/ig, this.evid));
+        //li = li.replace(/#edate/g, this.edate);
+
+        str += li;
+    });
+    $("#tblcoupon > tbody").append(str);
+    $("#tblcoupon").table("refresh");
+
+    $("#slcstake").val(data.stake);
+    $('#slcstake').selectmenu("refresh", true);
+
+    $("#spnwin").html(data.totalwin.toFixed(2));
+    $("#spnratio").html(data.rt.toFixed(2));
+    $("#spncount").html(data.count);
+
+    RefreshCoupon(data);
 }
