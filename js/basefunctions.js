@@ -80,15 +80,16 @@ $(document).on("pageshow", function (event) {
     if (getmember() != null && isvalidmember) {
         if (event.target.id == 'main') PageChat();
         else if (event.target.id == 'program') PageProgram();
-        else if (event.target.id == 'coupon') PageCoupon(); 
+        else if (event.target.id == 'coupon') PageCoupon();
     }
+    //$('.ui-navbar ul li').button();
 });
 $(document).on("pagecreate", function (event) {
     $("body > [data-role='panel']").panel();
     $("body > [data-role='panel'] [data-role='listview']").listview();
     //console.log(event.target.id);
     if (event.target.id != 'main' && event.target.id != 'loginDialog') {
-//        $(event.target).prepend($('#baseheader')[0].outerHTML);
+        //        $(event.target).prepend($('#baseheader')[0].outerHTML);
         //        $(event.target).append($('#basefooter')[0].outerHTML);
     }
 });
@@ -116,7 +117,7 @@ function ValidateCB(data) {
     else {
         isvalidmember = true;
         var jdata = JSON.parse(atob(decodeURIComponent(escape(data))));
-        $('.mydata').html(getmember().NickName + '(' + getmember().Credits + '+'+ getmember().DailyLoan +' P)');
+        $('.mydata').html(getmember().NickName + '(' + getmember().Credits + '+' + getmember().DailyLoan + ' P)');
         $.mobile.changePage("#" + localStorage["redirpage"]);
     }
 }
