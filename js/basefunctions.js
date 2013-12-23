@@ -1,11 +1,11 @@
-﻿//var siteurl = "http://www.bahisor.com/";
-var siteurl = "http://localhost:26087/";
+﻿var siteurl = "http://www.bahisor.com/";
+//var siteurl = "http://localhost:26087/";
 var apiurl = siteurl + "mobile/";
 var defaulttext = 'Yazmak için tıklayın...';
 var chatcheckdate = moment(new Date()).subtract('days', 1);
 var chatinterval;
 var isvalidmember = false;
-var currentversion = 4;
+var currentversion = 5;
 $(document).on("ready", function () {
     moment.lang('tr');
     jQuery.ajaxSetup({
