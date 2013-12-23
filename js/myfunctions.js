@@ -172,24 +172,37 @@ function loadprogram() {
             li = li.replace(/#mbs/g, this.mbs);
             li = li.replace(/#edate/g, this.edate);
             li = li.replace(/#sid/g, this.sid);
-
+            //console.log(this.bets);
             var addoption = '<a href="#" onclick="AddToCoupon(#id,#oid,#rt)" class="bt#oid ui-btn ui-mini" >#rt</a>'.replace(/#id/, this.id);
-            var o1 = jQuery.grep(this.bets, function (bet) { return bet.oid == 1; })[0].rt;
-            var o0 = jQuery.grep(this.bets, function (bet) { return bet.oid == 2; })[0].rt;
-            var o2 = jQuery.grep(this.bets, function (bet) { return bet.oid == 3; })[0].rt;
-            li = li.replace(/#o1/g, addoption.replace(/#oid/ig, 1).replace(/#rt/ig, o1));
-            li = li.replace(/#o0/g, addoption.replace(/#oid/ig, 2).replace(/#rt/ig, o0));
-            li = li.replace(/#o2/g, addoption.replace(/#oid/ig, 3).replace(/#rt/ig, o2));
-            var oa = jQuery.grep(this.bets, function (bet) { return bet.oid == 15; });
-            var ou = jQuery.grep(this.bets, function (bet) { return bet.oid == 16; });
-            if (oa.length > 0)
-                li = li.replace(/#oa/g, addoption.replace(/#oid/ig, 15).replace(/#rt/ig, oa[0].rt));
-            else
-                li = li.replace(/#oa/g, '');
-            if (ou.length > 0)
-                li = li.replace(/#ou/g, addoption.replace(/#oid/ig, 16).replace(/#rt/ig, ou[0].rt));
-            else
-                li = li.replace(/#ou/g, '');
+            var noclick = '<a href="#" class="ui-btn ui-mini" >-</a>';
+            if (this.sid == 1) {
+                var o1 = jQuery.grep(this.bets, function (bet) { return bet.oid == 1; })[0].rt;
+                var o0 = jQuery.grep(this.bets, function (bet) { return bet.oid == 2; })[0].rt;
+                var o2 = jQuery.grep(this.bets, function (bet) { return bet.oid == 3; })[0].rt;
+                li = li.replace(/#o1/g, addoption.replace(/#oid/ig, 1).replace(/#rt/ig, o1));
+                li = li.replace(/#o0/g, addoption.replace(/#oid/ig, 2).replace(/#rt/ig, o0));
+                li = li.replace(/#o2/g, addoption.replace(/#oid/ig, 3).replace(/#rt/ig, o2));
+                var oa = jQuery.grep(this.bets, function (bet) { return bet.oid == 15; });
+                var ou = jQuery.grep(this.bets, function (bet) { return bet.oid == 16; });
+                if (oa.length > 0)
+                    li = li.replace(/#oa/g, addoption.replace(/#oid/ig, 15).replace(/#rt/ig, oa[0].rt));
+                else
+                    li = li.replace(/#oa/g, noclick);
+                if (ou.length > 0)
+                    li = li.replace(/#ou/g, addoption.replace(/#oid/ig, 16).replace(/#rt/ig, ou[0].rt));
+                else
+                    li = li.replace(/#ou/g, noclick);
+            }
+            else if (this.sid == 2) {
+                var o1 = jQuery.grep(this.bets, function (bet) { return bet.oid == 72; })[0].rt;
+                //var o0 = jQuery.grep(this.bets, function (bet) { return bet.oid == 2; })[0].rt;
+                var o2 = jQuery.grep(this.bets, function (bet) { return bet.oid == 73; })[0].rt;
+                li = li.replace(/#o1/g, addoption.replace(/#oid/ig, 72).replace(/#rt/ig, o1));
+                li = li.replace(/#o0/g, noclick);
+                li = li.replace(/#o2/g, addoption.replace(/#oid/ig, 73).replace(/#rt/ig, o2));
+                li = li.replace(/#oa/g, noclick);
+                li = li.replace(/#ou/g, noclick);
+            }
             var bets = '';
             for (var i = 0; i < this.bets.length; i++)
                 bets += betspan.replace(/#oid/ig, this.bets[i].oid).replace(/#rt/ig, this.bets[i].rt).replace(/#tid/ig, this.bets[i].tid);
