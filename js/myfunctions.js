@@ -74,11 +74,13 @@ function attachtouchchatlist() {
             dir = event.type === "swipeleft" ? "left" : "right",
             transition = $.support.cssTransform3d ? dir : false;
 
-        //attachswipebase(listitem, transition, function (listitem) {
+        //        attachswipebase(listitem, transition, function (listitem) {
         if ($('#usertxt').val() == defaulttext) $('#usertxt').val('');
-        $("#usertxt").val($("#usertxt").val() + ' @' + listitem.children().children('.urlnick').attr('urlnick') + ' ');
+        var nick = listitem.children().children('.urlnick').attr('urlnick');
+        if ($("#usertxt").val().indexOf(nick) == -1)
+            $("#usertxt").val($("#usertxt").val() + ' @' + nick + ' ');
         $("#usertxt").focus();
-        //});
+        //        });
     });
     //    if (!$.mobile.support.touch) {
     //        $("#lastchat").removeClass("touch");
@@ -293,9 +295,9 @@ function RefreshCoupon(couponjson) {
 
     if (minsys <= maxsys)
         for (var i = minsys; i <= maxsys; i++)
-            sysstr += btn.replace(/#sysno/ig, i).replace(/#lastchild/ig, i==maxsys?"ui-last-child":"");
+            sysstr += btn.replace(/#sysno/ig, i).replace(/#lastchild/ig, i == maxsys ? "ui-last-child" : "");
 
-    $('#systems').html('<div class="ui-controlgroup-controls ">'+sysstr+'</div>');
+    $('#systems').html('<div class="ui-controlgroup-controls ">' + sysstr + '</div>');
     $('#systems').controlgroup().controlgroup('refresh');
 
     for (var i = 0; i < couponjson.systems.length; i++)
@@ -375,12 +377,12 @@ function changestake(elm, evid) {
 function SwitchSys(elm, sysno) {
     var jsoncoupon = JSON.parse(localStorage["coupon"]);
     var existing = jQuery.grep(jsoncoupon.systems, function (bet) { return bet == sysno; });
-    if (existing.length > 0) 
+    if (existing.length > 0)
         jsoncoupon.systems = jQuery.grep(jsoncoupon.systems, function (bet) { return bet != sysno; });
-    else 
+    else
         jsoncoupon.systems.push(sysno);
 
-    jsoncoupon.issys = jsoncoupon.systems > 0;  
+    jsoncoupon.issys = jsoncoupon.systems > 0;
     localStorage["coupon"] = JSON.stringify(jsoncoupon);
     RefreshCoupon(jsoncoupon);
     $(elm).toggleClass('ui-btn-active');
