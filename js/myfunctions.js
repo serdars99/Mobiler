@@ -296,7 +296,7 @@ function RefreshCoupon(couponjson) {
             sysstr += btn.replace(/#sysno/ig, i).replace(/#lastchild/ig, i==maxsys?"ui-last-child":"");
 
     $('#systems').html('<div class="ui-controlgroup-controls ">'+sysstr+'</div>');
-    $('#systems').controlgroup('refresh');
+    $('#systems').controlgroup().controlgroup('refresh');
 
     for (var i = 0; i < couponjson.systems.length; i++)
         $('#sys' + couponjson.systems[i]).toggleClass('ui-btn-active');
