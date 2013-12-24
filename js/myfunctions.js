@@ -120,7 +120,6 @@ function PageProgram() {
     var localprg = loadlocalitem("program");
     if (localprg != null)
         prgcheckdate = moment(localprg.lastdate);
-    console.log(moment(new Date()).diff(moment(localprg.lastdate), 'minutes'));
     if (localprg != null && moment(new Date()).diff(moment(localprg.lastdate), 'minutes') < 3) {
         loadprogramfilters();
         loadprogram();
