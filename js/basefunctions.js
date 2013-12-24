@@ -81,6 +81,7 @@ $(document).on("pageshow", function (event) {
         if (event.target.id == 'main') PageChat();
         else if (event.target.id == 'program') PageProgram();
         else if (event.target.id == 'coupon') PageCoupon();
+        else if (event.target.id == 'betdetail') PageBetdetails(); 
     }
     //$('.ui-navbar ul li').button();
 });

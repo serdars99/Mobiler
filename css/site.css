@@ -101,3 +101,31 @@ ul.touch li.ui-li-has-alt a.ui-btn
 #betdetails-popup{
     width: 90%;
 }
+.ulbetdeteals .ui-li-static
+{
+    padding:0px !important;
+}
+.ulbetdeteals .stripe1
+{
+    color:White;
+    background-color:Black
+}
+.ulbetdeteals .stripe1
+{
+    color:Black;
+    background-color:DarkGray;
+}
+.ulbetdeteals .stripeactive
+{
+    color:Black;
+    background-color:#3370cc !important;
+}
+.ulbetdeteals a
+{
+    color:inherit !important;
+}
+.stripe1,.stripe2
+{
+    height:26px;
+}
+

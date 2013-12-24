@@ -5,7 +5,7 @@
     <title>Bahisör Mobile</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="css/jquery.mobile-1.4.0.min.css" rel="stylesheet" type="text/css" />
-    <link href="css/site.css" rel="stylesheet" type="text/css" />
+    <link href="css/site.css?v3" rel="stylesheet" type="text/css" />
 </head>
 <body>
     <div data-role="page" id="main">
@@ -39,7 +39,7 @@
             </div>
         </div>
         <div data-role="footer" data-position="fixed" id="basefooter" data-theme="b" data-id="dfooter">
-            <div data-role="navbar" >
+            <div data-role="navbar">
                 <ul id="footer">
                     <li><a href="#main" class="ui-link ui-btn  ui-icon-grid ui-btn-icon-top ui-state-persist ui-btn-active">
                         Sohbet</a></li>
@@ -183,11 +183,11 @@
                 </tbody>
             </table>
             <div class="ui-bar">
-             <div class="ui-field-contain">
-                <label>
-                    Sistem:</label>
-                <div data-role="controlgroup" id="systems" data-type="horizontal" data-mini="true">
-                </div>
+                <div class="ui-field-contain">
+                    <label>
+                        Sistem:</label>
+                    <div data-role="controlgroup" id="systems" data-type="horizontal" data-mini="true">
+                    </div>
                 </div>
             </div>
             <!--                                <div data-role="controlgroup" id="systems2" data-type="horizontal" data-mini="true">
@@ -319,6 +319,20 @@
             </div>
         </div>
     </div>
+    <div data-role="page" id="betdetail">
+        <div data-role="header" data-theme="b" data-id="dheader" data-position="fixed">
+            <div class="ui-bar">
+                <a href="#" data-role="button" data-rel="back" data-icon="arrow-l">Geri</a>
+                <h1>
+                    <span id="betdetailevname"></span>
+                </h1>
+            </div>
+        </div>
+        <div data-role="content">
+            <ul id="bets" data-role="listview" data-inset="false" class="ulbetdeteals">
+            </ul>
+        </div>
+    </div>
     <div id="loginDialog" data-role="page">
         <div style="font-weight: bold">
             Giriş
@@ -359,15 +373,134 @@
             <ty>#time</ty><ty>#code</ty><ty>#mbs</ty><ty class="title"><a href="#evlink" data-rel="external">#evname</a>
             </ty><ty>#o1</ty><ty>#o0</ty><ty>#o2</ty><ty>#oa</ty><ty>#ou</ty><ty>
                 <div class="custom-border-radius">
-                    <a href="#" onclick="openbetdetails(#evid)" class="ui-btn ui-icon-info ui-btn-icon-notext ui-corner-all">
+                    <a href="#" onclick="openbetdetailspage(#evid)" class="ui-btn ui-icon-info ui-btn-icon-notext ui-corner-all">
                     </a></div>
-                    <span id="bets#evid" style="display:none">#bets
-                    </span>
                     </ty>
                     </tx>
         <tx id="trcouponhelper" class="tx#evid" edate="#edate" sid="#sid">
             <ty>#time</ty><ty>#code</ty><ty>#mbs</ty><ty class="title"><a href="#evlink" data-rel="external">#evname</a>
             </ty><ty>#bet</ty><ty>#rt</ty><ty>#bnk</ty><ty>#del</ty></tx>
+            <li data-role="list-divider" id="betlidivider">#txt</li>
+                <li id="betli2">
+                    <div class="ui-grid-a">
+                        <div class="ui-block-a stripe1">
+                            <a href="#" onclick="betdetailclick(this,#evid,#oid1)">
+                                <div class="ui-grid-a">
+                                    <div class="ui-block-a">
+                                        &nbsp;&nbsp;#on1
+                                    </div>
+                                    <div class="ui-block-b">
+                                        #rt1
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="ui-block-b stripe2">
+                            <a href="#" onclick="betdetailclick(this,#evid,#oid1)">
+                                <div class="ui-grid-a">
+                                    <div class="ui-block-a">
+                                        &nbsp;&nbsp;#on2
+                                    </div>
+                                    <div class="ui-block-b">
+                                        #rt2
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </li>
+                <li id="betli3">
+                    <div class="ui-grid-b">
+                        <div class="ui-block-a stripe1">
+                            <a href="#" onclick="betdetailclick(this,#evid,#oid1)">
+                                <div class="ui-grid-a">
+                                    <div class="ui-block-a">
+                                        &nbsp;&nbsp;#on1
+                                    </div>
+                                    <div class="ui-block-b">
+                                        #rt1
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="ui-block-b stripe2">
+                            <a href="#" onclick="betdetailclick(this,#evid,#oid2)">
+                                <div class="ui-grid-a">
+                                    <div class="ui-block-a">
+                                        &nbsp;&nbsp;#on2
+                                    </div>
+                                    <div class="ui-block-b">
+                                        #rt2
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="ui-block-c stripe1">
+                            <a href="#" onclick="betdetailclick(this,#evid,#oid3)">
+                                <div class="ui-grid-a">
+                                    <div class="ui-block-a">
+                                        &nbsp;&nbsp;#on3
+                                    </div>
+                                    <div class="ui-block-b">
+                                        #rt3
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </li>
+                <li id="betli4">
+                    <div class="ui-grid-c">
+                        <div class="ui-block-a stripe1">
+                            <a href="#" onclick="betdetailclick(this,#evid,#oid1)">
+                                <div class="ui-grid-a">
+                                    <div class="ui-block-a">
+                                        &nbsp;&nbsp;#on1
+                                    </div>
+                                    <div class="ui-block-b">
+                                        #rt1
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="ui-block-b stripe2">
+                            <a href="#" onclick="betdetailclick(this,#evid,#oid2)">
+                                <div class="ui-grid-a">
+                                    <div class="ui-block-a">
+                                        &nbsp;&nbsp;#on2
+                                    </div>
+                                    <div class="ui-block-b">
+                                        #rt2
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="ui-block-c stripe1">
+                            <a href="#" onclick="betdetailclick(this,#evid,#oid3)">
+                                <div class="ui-grid-a">
+                                    <div class="ui-block-a">
+                                        &nbsp;&nbsp;#on3
+                                    </div>
+                                    <div class="ui-block-b">
+                                        #rt3
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="ui-block-d stripe2">
+                            <a href="#" onclick="betdetailclick(this,#evid,#oid4)">
+                                <div class="ui-grid-a">
+                                    <div class="ui-block-a">
+                                        &nbsp;&nbsp;#on4
+                                    </div>
+                                    <div class="ui-block-b">
+                                        #rt4
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </li>
     </div>
     <!-- /popup -->
     <!--    <button onclick="trylogin()">
@@ -376,7 +509,7 @@
     <script type="text/javascript" src="js/jquery.mobile-1.4.0.min.js"></script>
     <!--<script type="text/javascript" src="js/moment.min.js"></script>-->
     <script type="text/javascript" src="js/moment-with-langs.min.js"></script>
-    <script type="text/javascript" src="js/basefunctions.js?v2"></script>
-    <script type="text/javascript" src="js/myfunctions.js?v2"></script>
+    <script type="text/javascript" src="js/basefunctions.js?v3"></script>
+    <script type="text/javascript" src="js/myfunctions.js?v3"></script>
 </body>
 </html>

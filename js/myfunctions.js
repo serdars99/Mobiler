@@ -120,6 +120,7 @@ function PageProgram() {
     var localprg = loadlocalitem("program");
     if (localprg != null)
         prgcheckdate = moment(localprg.lastdate);
+    console.log(moment(new Date()).diff(moment(localprg.lastdate), 'minutes'));
     if (localprg != null && moment(new Date()).diff(moment(localprg.lastdate), 'minutes') < 3) {
         loadprogramfilters();
         loadprogram();
@@ -203,10 +204,10 @@ function loadprogram() {
                 li = li.replace(/#oa/g, noclick);
                 li = li.replace(/#ou/g, noclick);
             }
-            var bets = '';
-            for (var i = 0; i < this.bets.length; i++)
-                bets += betspan.replace(/#oid/ig, this.bets[i].oid).replace(/#rt/ig, this.bets[i].rt).replace(/#tid/ig, this.bets[i].tid);
-            li = li.replace(/#bets/ig, bets);
+            //            var bets = '';
+            //            for (var i = 0; i < this.bets.length; i++)
+            //                bets += betspan.replace(/#oid/ig, this.bets[i].oid).replace(/#rt/ig, this.bets[i].rt).replace(/#tid/ig, this.bets[i].tid);
+            //            li = li.replace(/#bets/ig, bets);
 
             str += li;
         }
@@ -219,6 +220,75 @@ function loadprogram() {
         for (var i = 0; i < json.bets.length; i++)
             $('.tr' + json.bets[i].evid + ' .bt' + json.bets[i].oid).addClass('ui-btn-active');
     }
+}
+function openbetdetailspage(evid) {
+    localStorage["betdetailevid"] = evid;
+    $.mobile.changePage("#betdetail");
+}
+function PageBetdetails() {
+    var evid = parseInt(localStorage["betdetailevid"]);
+    var prg = JSON.parse(localStorage["program"]).obj;
+    var ev = jQuery.grep(prg.events, function (ev) { return evid == ev.id; })[0];
+    $('#betdetailevname').html(ev.ename);
+    $('#bets').html('');
+    var allbettypes = JSON.parse(localStorage["bettypes"]);
+    var liheader = $('#betlidivider')[0].outerHTML;
+    var li2 = $('#betli2')[0].outerHTML;
+    var li3 = $('#betli3')[0].outerHTML;
+    var li4 = $('#betli4')[0].outerHTML;
+    var str = '';
+    var bettypes = new Array();
+    for (var i = 0; i < ev.bets.length; i++) {
+        if (bettypes.indexOf(ev.bets[i].tid) == -1)
+            bettypes.push(ev.bets[i].tid);
+    }
+    for (var i = 0; i < bettypes.length; i++) {
+        var eventbetgroupdef = jQuery.grep(allbettypes, function (item) { return item.tid == bettypes[i]; });
+        var eventbettypeoptions = jQuery.grep(ev.bets, function (item) { return item.tid == bettypes[i]; });
+        var o1def = jQuery.grep(eventbetgroupdef, function (item) { return item.oid == eventbettypeoptions[0].oid; })[0].oname;
+        var o2def = jQuery.grep(eventbetgroupdef, function (item) { return item.oid == eventbettypeoptions[1].oid; })[0].oname;
+        str += liheader.replace(/#txt/ig, eventbetgroupdef[0].tname);
+        if (eventbettypeoptions.length == 2) {
+            var grpstr = li2.replace(/#evid/ig, ev.id).replace(/#oid1/ig, eventbettypeoptions[0].oid).replace(/#oid2/ig, eventbettypeoptions[1].oid);
+            grpstr = grpstr.replace(/#rt1/ig, eventbettypeoptions[0].rt).replace(/#rt2/ig, eventbettypeoptions[1].rt);
+            grpstr = grpstr.replace(/#on1/ig, o1def).replace(/#on2/ig, o2def);
+            str += grpstr;
+        }
+        else if (eventbettypeoptions.length == 3) {
+            var o3def = jQuery.grep(eventbetgroupdef, function (item) { return item.oid == eventbettypeoptions[2].oid; })[0].oname;
+            var grpstr = li3.replace(/#evid/ig, ev.id).replace(/#oid1/ig, eventbettypeoptions[0].oid).replace(/#oid2/ig, eventbettypeoptions[1].oid).replace(/#oid3/ig, eventbettypeoptions[2].oid);
+            grpstr = grpstr.replace(/#rt1/ig, eventbettypeoptions[0].rt).replace(/#rt2/ig, eventbettypeoptions[1].rt).replace(/#rt3/ig, eventbettypeoptions[2].rt);
+            grpstr = grpstr.replace(/#on1/ig, o1def).replace(/#on2/ig, o2def).replace(/#on3/ig, o3def);
+            grpstr = grpstr.replace(/onclick="betdetailclick\(this,\d+,77\)"/ig,'');
+            str += grpstr;
+        }
+        else if (eventbettypeoptions.length == 4) {
+            var o3def = jQuery.grep(eventbetgroupdef, function (item) { return item.oid == eventbettypeoptions[2].oid; })[0].oname;
+            var o4def = jQuery.grep(eventbetgroupdef, function (item) { return item.oid == eventbettypeoptions[3].oid; })[0].oname;
+            var grpstr = li4.replace(/#evid/ig, ev.id).replace(/#oid1/ig, eventbettypeoptions[0].oid).replace(/#oid2/ig, eventbettypeoptions[1].oid).replace(/#oid3/ig, eventbettypeoptions[2].oid).replace(/#oid4/ig, eventbettypeoptions[3].oid);
+            grpstr = grpstr.replace(/#rt1/ig, eventbettypeoptions[0].rt).replace(/#rt2/ig, eventbettypeoptions[1].rt).replace(/#rt3/ig, eventbettypeoptions[2].rt).replace(/#rt4/ig, eventbettypeoptions[3].rt);
+            grpstr = grpstr.replace(/#on1/ig, o1def).replace(/#on2/ig, o2def).replace(/#on3/ig, o3def).replace(/#on4/ig, o4def);
+            str += grpstr;
+        }
+    }
+    console.log(bettypes);
+    //    str += liheader.replace(/#txt/ig, 'Maç Sonucu');
+    //    str += li2.replace(/#evid/ig, ev.id).replace(/#oid1/ig, 1).replace(/#oid2/ig, 3)
+    //    .replace(/#rt1/ig, 1.25).replace(/#rt2/ig, 3.85).replace(/#on1/ig, '1').replace(/#on2/ig, '2').replace(/#tid/ig, 3);
+    //    str += liheader.replace(/#txt/ig, 'Maç Sonucu ASD');
+    //    str += li3.replace(/#evid/ig, ev.id).replace(/#oid1/ig, 1).replace(/#oid2/ig, 3).replace(/#oid3/ig, 4)
+    //    .replace(/#rt1/ig, 1.25).replace(/#rt2/ig, 3.85).replace(/#rt3/ig, 4.85).replace(/#on1/ig, '1').replace(/#on2/ig, '2')
+    //    .replace(/#on3/ig, '3').replace(/#tid/ig, 4);
+
+
+    $('#bets').html(str);
+    $('#bets').listview('refresh');
+}
+function betdetailclick(elm, evid, oid) {
+    var hasclassbefore = $(elm).parent().hasClass('stripeactive');
+    $('#bets').children().children().children().removeClass('stripeactive');
+    if (!hasclassbefore)
+        var hasclass = $(elm).parent().addClass('stripeactive');
 }
 function openbetdetails(evid) {
     var bettypes = JSON.parse(localStorage["bettypes"]);
