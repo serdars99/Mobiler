@@ -74,11 +74,11 @@ ul.touch li.ui-li-has-alt a.ui-btn
 }
 .movie-list thead
 {
-    background-color:Gray;
+    background-color: Gray;
 }
 .movie-list thead th
 {
-    color:white;
+    color: white;
 }
 .movie-list tbody td a
 {
@@ -94,38 +94,92 @@ ul.touch li.ui-li-has-alt a.ui-btn
     -webkit-border-radius: .3125em;
     border-radius: .3125em;
 }
-.ui-select 
+.ui-select
 {
     font-size: .60em;
 }
-#betdetails-popup{
+#betdetails-popup
+{
     width: 90%;
 }
 .ulbetdeteals .ui-li-static
 {
-    padding:0px !important;
+    padding: 0px !important;
 }
 .ulbetdeteals .stripe1
 {
-    color:White;
-    background-color:Black
+    color: White;
+    background-color: Black;
 }
 .ulbetdeteals .stripe1
 {
-    color:Black;
-    background-color:DarkGray;
+    color: Black;
+    background-color: DarkGray;
 }
 .ulbetdeteals .stripeactive
 {
-    color:Black;
-    background-color:#3370cc !important;
+    color: Black;
+    background-color: #3370cc !important;
 }
 .ulbetdeteals a
 {
-    color:inherit !important;
+    color: inherit !important;
+    display: list-item !important;
+    text-align: center;
 }
-.stripe1,.stripe2
+.stripe1, .stripe2
 {
-    height:26px;
+    height: 26px;
 }
+.betdeteventname
+{
+    font-size: .7em !important;
+}
+.defdivider
+{
+    padding: 0px !important;
+    background-color: Gray !important;
+    text-align: center !important;
+}
+.ui-block-a, ui-block-b, ui-block-c, ui-block-d, ui-block-e
+{
+    text-align: center !important;
+}
+.ui-link
+{
+    text-align: center !important;
+}
+.ulbetdeteals
+{
+    display: list-item !important;
+    
+}
+.ulprg
+{
+    padding-top:20px;
+}
+.prgdivider
+{
+    padding:0px !important;
+}
+a 
+{
+    text-decoration:none !important;
+}
+.prgheadline
+{
+    display:list-item;
+    padding:0px !important;
+    white-space:normal;
+}
+.ui-field-contain
+{
+    padding:0px !important;
+}
+.ui-select
+{
+    width:30px !important;
+    float:left;
+}
+
 
