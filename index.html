@@ -5,28 +5,29 @@
     <title>Bahisör Mobile</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="css/jquery.mobile-1.4.0.min.css" rel="stylesheet" type="text/css" />
-    <link href="css/site.css?v4" rel="stylesheet" type="text/css" />
+    <link href="css/site.css?v5" rel="stylesheet" type="text/css" />
 </head>
 <body>
     <div data-role="page" id="main">
         <div data-role="header" id="baseheader" data-theme="b" data-id="dheader" data-position="fixed">
             <div class="ui-bar">
                 <a href="#outside" data-icon="bars" data-iconpos="notext">Menu</a>
-                <h1>
-                    Bahisör - <span class="mydata"></span>
+                <h1>Bahisör - <span class="mydata"></span>
                 </h1>
             </div>
         </div>
         <div id="home-content" data-role="content">
             <div class="chatTitle">
-                Günün Sohbeti</div>
+                Günün Sohbeti
+            </div>
             <textarea id="usertxt"></textarea>
             <ul data-role="listview" data-divider-theme="a" data-inset="true" id="lastchat" class="touch">
             </ul>
         </div>
         <div id="confirm1" class="ui-content" data-role="popup" data-theme="a" data-history="false">
             <p id="question1">
-                Silmek istediğinize emin misiniz?</p>
+                Silmek istediğinize emin misiniz?
+            </p>
             <div class="ui-grid-a">
                 <div class="ui-block-a">
                     <a id="yes1" data-role="button" data-mini="true" data-shadow="false" data-theme="a"
@@ -41,12 +42,11 @@
         <div data-role="footer" data-position="fixed" id="basefooter" data-theme="b" data-id="dfooter">
             <div data-role="navbar">
                 <ul id="footer">
-                    <li><a href="#main" class="ui-link ui-btn  ui-icon-grid ui-btn-icon-top ui-state-persist ui-btn-active">
-                        Sohbet</a></li>
+                    <li><a href="#main" class="ui-link ui-btn  ui-icon-grid ui-btn-icon-top ui-state-persist ui-btn-active">Sohbet</a></li>
                     <li><a href="#program" class="ui-link ui-btn  ui-icon-grid ui-btn-icon-top">Program</a></li>
-                    <li><a href="#coupon" class="ui-link ui-btn  ui-icon-grid ui-btn-icon-top">Kupon</a></li>
+                    <li><a href="#coupon" class="ui-link ui-btn  ui-icon-grid ui-btn-icon-top">Kuponum</a></li>
                     <li><a href="#profile" class="ui-link ui-btn  ui-icon-grid ui-btn-icon-top">Profilim</a></li>
-                    <li><a href="#others" class="ui-link ui-btn  ui-icon-grid ui-btn-icon-top">Diğer</a></li>
+                    <li><a href="#coupons" class="ui-link ui-btn  ui-icon-grid ui-btn-icon-top">Kuponlar</a></li>
                 </ul>
             </div>
         </div>
@@ -55,11 +55,9 @@
         <div data-role="header" data-theme="b" data-id="dheader" data-position="fixed">
             <div class="ui-bar">
                 <a href="#outside" data-icon="bars" data-iconpos="notext">Menu</a>
-                <h1>
-                    Bahisör - <span class="mydata"></span>
+                <h1>Bahisör - <span class="mydata"></span>
                 </h1>
-                <a href="#" data-role="button" data-rel="back" data-icon="arrow-l" class="ui-btn-right">
-                    Geri</a>
+                <a href="#" data-role="button" data-rel="back" data-icon="arrow-l" class="ui-btn-right">Geri</a>
             </div>
         </div>
         <div data-role="content">
@@ -68,7 +66,8 @@
                     <select id="slcsport" data-mini="true" onchange="loadprogram();">
                         <option value="1">Futbol</option>
                         <option value="2">Basketbol</option>
-                    </select></div>
+                    </select>
+                </div>
                 <div class="ui-block-b">
                     <select id="slcdate" data-mini="true" onchange="loadprogram();">
                     </select>
@@ -79,18 +78,17 @@
                     </select>
                 </div>
             </div>
-            <ul id="ulprg" data-role="listview" data-inset="false" class="ulbetdeteals ulprg">
+            <ul id="ulprg" data-role="listview" data-inset="false" class="ulbetdeteals ulprg" >
             </ul>
         </div>
         <div data-role="footer" data-position="fixed" data-theme="b" data-id="dfooter">
             <div data-role="navbar">
                 <ul id="Ul1">
                     <li><a href="#main" class="ui-link ui-btn ui-icon-grid ui-btn-icon-top">Sohbet</a></li>
-                    <li><a href="#program" class="ui-link ui-btn ui-icon-grid ui-btn-icon-top ui-state-persist ui-btn-active">
-                        Program</a></li>
-                    <li><a href="#coupon" class="ui-link ui-btn ui-icon-grid ui-btn-icon-top">Kupon</a></li>
+                    <li><a href="#program" class="ui-link ui-btn ui-icon-grid ui-btn-icon-top ui-state-persist ui-btn-active">Program</a></li>
+                    <li><a href="#coupon" class="ui-link ui-btn ui-icon-grid ui-btn-icon-top">Kuponum</a></li>
                     <li><a href="#profile" class="ui-link ui-btn ui-icon-grid ui-btn-icon-top">Profilim</a></li>
-                    <li><a href="#others" class="ui-link ui-btn ui-icon-grid ui-btn-icon-top">Diğer</a></li>
+                    <li><a href="#coupons" class="ui-link ui-btn  ui-icon-grid ui-btn-icon-top">Kuponlar</a></li>
                 </ul>
             </div>
         </div>
@@ -99,167 +97,141 @@
         <div data-role="header" data-theme="b" data-id="dheader" data-position="fixed">
             <div class="ui-bar">
                 <a href="#outside" data-icon="bars" data-iconpos="notext">Menu</a>
-                <h1>
-                    Bahisör - <span class="mydata"></span>
+                <h1>Bahisör - <span class="mydata"></span>
                 </h1>
-                <a href="#" data-role="button" data-rel="back" data-icon="arrow-l" class="ui-btn-right">
-                    Geri</a>
+                <a href="#" data-role="button" data-rel="back" data-icon="arrow-l" class="ui-btn-right">Geri</a>
             </div>
         </div>
         <div data-role="content">
-            <a href="#" onclick="ClearCoupon()" class="ui-btn">Kuponu Temizle</a>
-            <!--<a href="#" onclick="setsys()" class="ui-btn">setsys</a>-->
-            <table data-role="table" id="tblcoupon" data-mode="columntoggle" class="movie-list ui-body-d ui-shadow table-stripe ui-responsive">
-                <thead>
-                    <tr>
-                        <th data-priority="2">
-                            Tarih
-                        </th>
-                        <th data-priority="2">
-                            Kod
-                        </th>
-                        <th data-priority="2">
-                            MBS
-                        </th>
-                        <th data-priority="1">
-                            Maç
-                        </th>
-                        <th data-priority="1">
-                            Bahis
-                        </th>
-                        <th data-priority="1">
-                            Oran
-                        </th>
-                        <th data-priority="1">
-                        </th>
-                        <th data-priority="1">
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
-            <div class="ui-bar">
-                <div class="ui-field-contain">
-                    <label>
-                        Sistem:</label>
-                    <div data-role="controlgroup" id="systems" data-type="horizontal" data-mini="true">
+            <ul data-role="listview" class="table-stripe" id="ulcpn">
+            </ul>
+            <div id="cpfree">
+                Kuponunuz şu anda boş.
+            </div>
+            <div style="padding-top: 5px">&nbsp;</div>
+            <div id="cpdets" style="display: none">
+                <div class="ui-bar nopadding">
+                    <div class="ui-field-contain lessmargin">
+                        <div class="ui-grid-a">
+                            <div class="ui-block-a alignleft">
+                                <div class="ui-field-contain lessmargin">
+                                    <label for="select-native-1" style="float: left">
+                                        Misli:&nbsp;</label>
+                                    <select id="slcstake" name="slcstake" data-mini="true" class="ui-btn-inline selectleft" onchange="changestake();">
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="ui-block-b alignleft">
+                                <div class="ui-field-contain lessmargin">
+                                    &nbsp;&nbsp;Kol.Sayısı:<span id="spncount"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ui-bar nopadding">
+                    <div class="ui-field-contain lessmargin">
+                        <label>
+                            Sistem:</label>
+                        <div data-role="controlgroup" id="systems" data-type="horizontal" data-mini="true">
+                        </div>
+                    </div>
+                </div>
+                <div class="ui-bar nopadding">
+                    <div class="ui-grid-a">
+                        <div class="ui-block-a alignleft">
+                            <div class="ui-field-contain lessmargin">
+                                Oran:<span id="spnratio"></span>
+                            </div>
+                        </div>
+                        <div class="ui-block-b alignleft ">
+                            <div class="ui-field-contain lessmargin">
+                                Kazanç:<span id="spnwin"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ui-grid-a">
+                    <div class="ui-block-a">
+                        <a href="#" onclick="ClearCoupon()" class="ui-btn ui-mini">Kuponu Temizle</a>
+                    </div>
+                    <div class="ui-block-b">
+                        <a href="#" onclick="SendCoupon()" style="display: none;" class="ui-btn ui-mini" id="sendcpnbtn">Gönder</a>
                     </div>
                 </div>
             </div>
-            <!--                                <div data-role="controlgroup" id="systems2" data-type="horizontal" data-mini="true">
-                                <a href="#" onclick="SendCoupon()" class="ui-btn ui-mini" >Gönder</a>
-                                <a href="#" onclick="SendCoupon()" class="ui-btn ui-mini" >Gönder</a>
-                    </div>-->
-            <div class="ui-bar">
-                <div class="ui-field-contain">
-                    <label for="select-native-1" style="width:30px !important;float:left">
-                        Misli:</label>
-                    <select id="slcstake" name="slcstake" data-mini="true" class="ui-btn-inline" onchange="changestake();">
-                    </select>
-                </div>
-            </div>
-            <div class="ui-bar">
-                <div class="ui-field-contain">
-                    Oran:<span id="spnratio"></span></div>
-            </div>
-            <div class="ui-grid-a">
-                <div class="ui-block-a">
-                    <div class="ui-field-contain">
-                        Kazanç:<span id="spnwin"></span></div>
-                </div>
-                <div class="ui-block-b">
-                    <div class="ui-field-contain">
-                        Kol.Sayısı:<span id="spncount"></span></div>
-                </div>
-            </div>
-            <a href="#" onclick="SendCoupon()" class="ui-btn">Gönder</a>
         </div>
         <div data-role="footer" data-position="fixed" data-theme="b" data-id="dfooter">
             <div data-role="navbar">
                 <ul id="Ul2">
                     <li><a href="#main" class="ui-link ui-btn ui-icon-grid ui-btn-icon-top ">Sohbet</a></li>
                     <li><a href="#program" class="ui-link ui-btn ui-icon-grid ui-btn-icon-top ">Program</a></li>
-                    <li><a href="#coupon" class="ui-link ui-btn  ui-icon-grid ui-btn-icon-top ui-state-persist ui-btn-active">
-                        Kupon</a></li>
+                    <li><a href="#coupon" class="ui-link ui-btn  ui-icon-grid ui-btn-icon-top ui-state-persist ui-btn-active">Kuponum</a></li>
                     <li><a href="#profile" class="ui-link ui-btn  ui-icon-grid ui-btn-icon-top ">Profilim</a></li>
-                    <li><a href="#others" class="ui-link ui-btn  ui-icon-grid ui-btn-icon-top ">Diğer</a></li>
+                    <li><a href="#coupons" class="ui-link ui-btn  ui-icon-grid ui-btn-icon-top">Kuponlar</a></li>
                 </ul>
             </div>
         </div>
     </div>
     <div data-role="page" id="profile">
-        Profile
         <div data-role="header" data-theme="b" data-id="dheader" data-position="fixed">
             <div class="ui-bar">
                 <a href="#outside" data-icon="bars" data-iconpos="notext">Menu</a>
-                <h1>
-                    Bahisör - <span class="mydata"></span>
+                <h1>Bahisör - <span class="mydata"></span>
                 </h1>
-                <a href="#" data-role="button" data-rel="back" data-icon="arrow-l" class="ui-btn-right">
-                    Geri</a>
+                <a href="#" data-role="button" data-rel="back" data-icon="arrow-l" class="ui-btn-right">Geri</a>
             </div>
         </div>
         <div data-role="content">
-            <div class="ui-grid-b">
-                <div class="ui-block-a">
-                    <select id="Select4" data-mini="true" onchange="loadprogram();">
-                        <option value="1">Futbol</option>
-                        <option value="2">Basketbol</option>
-                    </select></div>
-                <div class="ui-block-b">
-                    <select id="Select5" data-mini="true" onchange="loadprogram();">
-                    </select>
-                </div>
-                <div class="ui-block-c">
-                    <select id="Select6" data-mini="true" onchange="loadprogram();">
-                        <option value="">Turnuva</option>
-                    </select>
-                </div>
-            </div>
-            <table data-role="table" id="Table2" data-mode="columntoggle" class="movie-list ui-body-d ui-shadow table-stripe ui-responsive">
-                <thead>
-                    <tr>
-                        <th data-priority="1">
-                        </th>
-                        <th data-priority="1">
-                        </th>
-                        <th data-priority="1">
-                        </th>
-                        <th data-priority="1">
-                        </th>
-                        <th data-priority="1">
-                            1
-                        </th>
-                        <th data-priority="1">
-                            X
-                        </th>
-                        <th data-priority="1">
-                            2
-                        </th>
-                        <th data-priority="2">
-                            2,5A
-                        </th>
-                        <th data-priority="2">
-                            2,5Ü
-                        </th>
-                        <th data-priority="1">
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
-            <div id="Div4" class="ui-content" data-role="popup" data-theme="a" data-history="false"
-                data-transition="flip">
-                <a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete"
-                    data-iconpos="notext" class="ui-btn-right">Kapat</a>
-                <p id="P3">
-                    Maçın Diğer Bahisleri</p>
-                <div id="Div5">
-                </div>
-                <!--                <ul data-role="listview" data-inset="true" data-divider-theme="a" id="listviewid"
-                    data-mini="true">
+            <div id="cpns">
+                <!--   <ul data-role="listview" class="cplist" data-inset="true">
+                    <li id="li2" data-role="list-divider">
+                        <div class="ui-grid-c" style="padding-top: 5px">
+                            <div class="ui-block-a">
+                                #ctime
+                            </div>
+                            <div class="ui-block-b">
+                                Misli:#cstake#ccount
+                            </div>
+                            <div class="ui-block-c">
+                                Oran:#rt
+                            </div>
+                            <div class="ui-block-d">
+                                <div class="ui-grid-a">
+                                    <div class="ui-block-a">
+                                        Kazanç:#winning
+                                    </div>
+                                    <div class="ui-block-b">
+                                        <a onclick="#cpid" class="ui-btn-inline">Sil</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li id="li1">
+                        <div class="ui-bar prgheadline">
+                            <div class="ui-grid-a">
+                                <div class="ui-block-a">
+                                    #time&nbsp;&nbsp;#code.#evname[#mbs]
+                                </div>
+                                <div class="ui-block-b">
+                                    #tn:#on&nbsp;&nbsp;#rt#bnk
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li id="li3">
+                        <div class="ui-bar prgheadline">
+                            <div class="ui-grid-a">
+                                <div class="ui-block-a">
+                                    #time&nbsp;&nbsp;#code.#evname[#mbs]
+                                </div>
+                                <div class="ui-block-b">
+                                    #tn:#on&nbsp;&nbsp;#rt#bnk
+                                </div>
+                            </div>
+                        </div>
+                    </li>
                 </ul>-->
             </div>
         </div>
@@ -268,10 +240,34 @@
                 <ul id="Ul3">
                     <li><a href="#main" class="ui-link ui-btn ui-icon-grid ui-btn-icon-top">Sohbet</a></li>
                     <li><a href="#program" class="ui-link ui-btn ui-icon-grid ui-btn-icon-top ">Program</a></li>
-                    <li><a href="#coupon" class="ui-link ui-btn ui-icon-grid ui-btn-icon-top ">Kupon</a></li>
-                    <li><a href="#profile" class="ui-link ui-btn ui-icon-grid ui-btn-icon-top  ui-state-persist ui-btn-active">
-                        Profilim</a></li>
-                    <li><a href="#others" class="ui-link ui-btn ui-icon-grid ui-btn-icon-top ">Diğer</a></li>
+                    <li><a href="#coupon" class="ui-link ui-btn ui-icon-grid ui-btn-icon-top ">Kuponum</a></li>
+                    <li><a href="#profile" class="ui-link ui-btn ui-icon-grid ui-btn-icon-top  ui-state-persist ui-btn-active">Profilim</a></li>
+                    <li><a href="#coupons" class="ui-link ui-btn ui-icon-grid ui-btn-icon-top ">Kuponlar</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div data-role="page" id="coupons">
+        <div data-role="header" data-theme="b" data-id="dheader" data-position="fixed">
+            <div class="ui-bar">
+                <a href="#outside" data-icon="bars" data-iconpos="notext">Menu</a>
+                <h1>Bahisör - <span class="mydata"></span>
+                </h1>
+                <a href="#" data-role="button" data-rel="back" data-icon="arrow-l" class="ui-btn-right">Geri</a>
+            </div>
+        </div>
+        <div data-role="content">
+            <div id="cpnsall">
+            </div>
+        </div>
+        <div data-role="footer" data-position="fixed" data-id="dfooter" data-theme="b">
+            <div data-role="navbar">
+                <ul id="Ul4">
+                    <li><a href="#main" class="ui-link ui-btn ui-icon-grid ui-btn-icon-top">Sohbet</a></li>
+                    <li><a href="#program" class="ui-link ui-btn ui-icon-grid ui-btn-icon-top ">Program</a></li>
+                    <li><a href="#coupon" class="ui-link ui-btn ui-icon-grid ui-btn-icon-top ">Kuponum</a></li>
+                    <li><a href="#profile" class="ui-link ui-btn ui-icon-grid ui-btn-icon-top">Profilim</a></li>
+                    <li><a href="#others" class="ui-link ui-btn ui-icon-grid ui-btn-icon-top ui-state-persist ui-btn-active">Kuponlar</a></li>
                 </ul>
             </div>
         </div>
@@ -306,39 +302,114 @@
         <ul data-role="listview">
             <li data-icon="back"><a href="#" data-rel="close">Kapat</a></li>
             <li><a href="#" data-role="button" onclick="ResetLogin()" data-icon="arrow-l">Resetle</a></li>
-            <li><a href="#" data-role="button" onclick="alert(localStorage['currentversion']);">
-                Versiyon</a></li>
+            <li><a href="#" data-role="button" onclick="alert(localStorage['currentversion']);">Versiyon</a></li>
         </ul>
     </div>
     <div id="htmlhelpers" style="display: none">
         <!--<li data-role="list-divider">Friday, October 8, 2010 <span class="ui-li-count">2</span></li>-->
         <ul id="maincommentsx">
-            <li class="#delclass" cid="#cid">
-                <p>
-                    #comment</p>
+            <li class="#delclass " cid="#cid">
+                <p style="white-space: normal;">
+                    #comment
+                </p>
                 <p class="ui-li-aside" style="position: static">
-                    &nbsp;<strong class="urlnick" urlnick="#urlnick">#nick(#time)</strong>&nbsp;</p>
+                    &nbsp;<strong class="urlnick" urlnick="#urlnick">#nick(#time)</strong>&nbsp;
+                </p>
             </li>
         </ul>
         <ul id="programhidden">
             <li class="#delclass" cid="#cid">
                 <p>
-                    #ename</p>
+                    #ename
+                </p>
                 <p class="ui-li-aside" style="position: static">
-                    &nbsp;<strong class="urlnick" urlnick="#urlnick">#nick(#time)</strong>&nbsp;</p>
+                    &nbsp;<strong class="urlnick" urlnick="#urlnick">#nick(#time)</strong>&nbsp;
+                </p>
             </li>
         </ul>
-        <tx id="trproghelper" class="tx#evid" edate="#edate" sid="#sid">
-            <ty>#time</ty><ty>#code</ty><ty>#mbs</ty><ty class="title"><a href="#evlink" data-rel="external">#evname</a>
-            </ty><ty>#o1</ty><ty>#o0</ty><ty>#o2</ty><ty>#oa</ty><ty>#ou</ty><ty>
-                <div class="custom-border-radius">
-                    <a href="#" onclick="openbetdetailspage(#evid)" class="ui-btn ui-icon-info ui-btn-icon-notext ui-corner-all">
-                    </a></div>
-                    </ty>
-                    </tx>
-        <tx id="trcouponhelper" class="tx#evid" edate="#edate" sid="#sid">
-            <ty>#time</ty><ty>#code</ty><ty>#mbs</ty><ty class="title"><a href="#evlink" data-rel="external">#evname</a>
-            </ty><ty>#bet</ty><ty>#rt</ty><ty>#bnk</ty><ty>#del</ty></tx>
+        <li data-role="list-divider" id="licpshead">
+            #nick
+            <div class="ui-grid-c" style="padding-top: 5px">
+                <div class="ui-block-a alignleft">
+                    #ctime
+                </div>
+                <div class="ui-block-b alignleft">
+                    Misli:#cstake#ccount
+                </div>
+                <div class="ui-block-c alignleft">
+                    Oran:#rt
+                </div>
+                <div class="ui-block-d alignleft">
+                    <div class="ui-grid-a">
+                        <div class="ui-block-a">
+                            Kazanç:#winning
+                        </div>
+                        <div class="ui-block-b">
+                            <a onclick="#" class="ui-btn-inline">Sil</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </li>
+        <li id="licpsitem">
+            <div class="ui-bar prgheadline">
+                <div class="ui-grid-a">
+                    <div class="ui-block-a alignleft" style="width: 78%">
+                        #time&nbsp;&nbsp;#code.#evname[#mbs]
+                    </div>
+                    <div class="ui-block-b" style="width: 22%">
+                        #tn:#on&nbsp;&nbsp;#rt#bnk#dl
+                    </div>
+                </div>
+            </div>
+        </li>
+        <li data-role="list-divider" class="defdivider" id="licpfirst">
+            <div class="ui-grid-c">
+                <div class="ui-block-a alignleft">
+                    &nbsp;&nbsp;&nbsp; Bahis
+                </div>
+                <div class="ui-block-b">
+                    Seçim
+                </div>
+                <div class="ui-block-c">
+                    Oran
+                </div>
+                <div class="ui-block-d">
+                </div>
+            </div>
+        </li>
+        <li data-role="list-divider" id="licphead">
+            <div class="ui-bar prgheadline">
+                #time&nbsp;&nbsp;<span>#code.#evname</span><span style="float: right !important">#mbs&nbsp;</span>
+            </div>
+        </li>
+        <li id="licp">
+            <div class="ui-grid-a" style="padding-top: 5px">
+                <div class="ui-block-a " style="width: 75%">
+                    <div class="ui-grid-b">
+                        <div class="ui-block-a alignleft">
+                            #tn
+                        </div>
+                        <div class="ui-block-b">
+                            #on
+                        </div>
+                        <div class="ui-block-c">
+                            #rt
+                        </div>
+                    </div>
+                </div>
+                <div class="ui-block-b" style="width: 25%">
+                    <div class="ui-grid-a">
+                        <div class="ui-block-a">
+                            #bnk
+                        </div>
+                        <div class="ui-block-b">
+                            #del
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </li>
         <li data-role="list-divider" class="defdivider" id="liprgfirst">
             <div class="ui-grid-c">
                 <div class="ui-block-a">
@@ -355,8 +426,7 @@
                 </div>
             </div>
         </li>
-        <li data-role="list-divider" id="liprghead" class="prgdivider tx1#evid" edate="#edate"
-            sid="#sid">
+        <li data-role="list-divider" id="liprghead" class="prgdivider tx1#evid" edate="#edate" sid="#sid">
             <div class="ui-bar prgheadline">
                 #time&nbsp;&nbsp;<span>#code.#evname</span><span style="float: right !important">#mbs&nbsp;</span>
             </div>
@@ -373,7 +443,7 @@
                     #link3
                 </div>
                 <div class="ui-block-d stripe2">
-                    <a href="#" onclick="openbetdetailspage(#evid)">#bcount </a>
+                    <a href="#" onclick="openbetdetailspage(#evid)" class="xoidx">#bcount </a>
                 </div>
             </div>
         </li>
@@ -381,7 +451,7 @@
         <li id="betli2">
             <div class="ui-grid-a">
                 <div class="ui-block-a stripe1">
-                    <a href="#" onclick="betdetailclick(this,#evid,#oid1,#rt1)">
+                    <a href="#" onclick="addremovebet(this,#evid,#oid1,#rt1)" id="ad#oid1">
                         <div class="ui-grid-a">
                             <div class="ui-block-a">
                                 &nbsp;&nbsp;#on1
@@ -393,7 +463,7 @@
                     </a>
                 </div>
                 <div class="ui-block-b stripe2">
-                    <a href="#" onclick="betdetailclick(this,#evid,#oid2,#rt2)">
+                    <a href="#" onclick="addremovebet(this,#evid,#oid2,#rt2)" id="ad#oid2">
                         <div class="ui-grid-a">
                             <div class="ui-block-a">
                                 &nbsp;&nbsp;#on2
@@ -409,7 +479,7 @@
         <li id="betli3">
             <div class="ui-grid-b">
                 <div class="ui-block-a stripe1">
-                    <a href="#" onclick="betdetailclick(this,#evid,#oid1,#rt1)">
+                    <a href="#" onclick="addremovebet(this,#evid,#oid1,#rt1)" id="ad#oid2">
                         <div class="ui-grid-a">
                             <div class="ui-block-a">
                                 &nbsp;&nbsp;#on1
@@ -421,7 +491,7 @@
                     </a>
                 </div>
                 <div class="ui-block-b stripe2">
-                    <a href="#" onclick="betdetailclick(this,#evid,#oid2,#rt2)">
+                    <a href="#" onclick="addremovebet(this,#evid,#oid2,#rt2)" id="ad#oid2">
                         <div class="ui-grid-a">
                             <div class="ui-block-a">
                                 &nbsp;&nbsp;#on2
@@ -433,7 +503,7 @@
                     </a>
                 </div>
                 <div class="ui-block-c stripe1">
-                    <a href="#" onclick="betdetailclick(this,#evid,#oid3,#rt3)">
+                    <a href="#" onclick="addremovebet(this,#evid,#oid3,#rt3)" id="ad#oid2">
                         <div class="ui-grid-a">
                             <div class="ui-block-a">
                                 &nbsp;&nbsp;#on3
@@ -449,7 +519,7 @@
         <li id="betli4">
             <div class="ui-grid-c">
                 <div class="ui-block-a stripe1">
-                    <a href="#" onclick="betdetailclick(this,#evid,#oid1,#rt1)">
+                    <a href="#" onclick="addremovebet(this,#evid,#oid1,#rt1)" id="ad#oid1">
                         <div class="ui-grid-a">
                             <div class="ui-block-a">
                                 &nbsp;&nbsp;#on1
@@ -461,7 +531,7 @@
                     </a>
                 </div>
                 <div class="ui-block-b stripe2">
-                    <a href="#" onclick="betdetailclick(this,#evid,#oid2,#rt2)">
+                    <a href="#" onclick="addremovebet(this,#evid,#oid2,#rt2)" id="ad#oid2">
                         <div class="ui-grid-a">
                             <div class="ui-block-a">
                                 &nbsp;&nbsp;#on2
@@ -473,7 +543,7 @@
                     </a>
                 </div>
                 <div class="ui-block-c stripe1">
-                    <a href="#" onclick="betdetailclick(this,#evid,#oid3,#rt3)">
+                    <a href="#" onclick="addremovebet(this,#evid,#oid3,#rt3)" id="ad#oid3">
                         <div class="ui-grid-a">
                             <div class="ui-block-a">
                                 &nbsp;&nbsp;#on3
@@ -485,7 +555,7 @@
                     </a>
                 </div>
                 <div class="ui-block-d stripe2">
-                    <a href="#" onclick="betdetailclick(this,#evid,#oid4,#rt4)">
+                    <a href="#" onclick="addremovebet(this,#evid,#oid4,#rt4)" id="ad#oid4">
                         <div class="ui-grid-a">
                             <div class="ui-block-a">
                                 &nbsp;&nbsp;#on4
@@ -506,7 +576,7 @@
     <script type="text/javascript" src="js/jquery.mobile-1.4.0.min.js"></script>
     <!--<script type="text/javascript" src="js/moment.min.js"></script>-->
     <script type="text/javascript" src="js/moment-with-langs.min.js"></script>
-    <script type="text/javascript" src="js/basefunctions.js?v4"></script>
-    <script type="text/javascript" src="js/myfunctions.js?v4"></script>
+    <script type="text/javascript" src="js/basefunctions.js?v5"></script>
+    <script type="text/javascript" src="js/myfunctions.js?v5"></script>
 </body>
 </html>

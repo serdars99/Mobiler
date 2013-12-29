@@ -82,13 +82,6 @@ function attachtouchchatlist() {
         $("#usertxt").focus();
         //        });
     });
-    //    if (!$.mobile.support.touch) {
-    //        $("#lastchat").removeClass("touch");
-    //        $(".delete").on("click", function () {
-    //            var listitem = $(this).parent("li");
-    //            confirmAndDelete(listitem, null, event.type === "swipeleft" ? 1 : 2);
-    //        });
-    //    }
     function confirmAndDeleteDailyComment(listitem, transition) {
         //$("#confirm1" + " .topic").remove();
         //listitem.find(".topic").clone().insertAfter("#question1");
@@ -115,30 +108,32 @@ function senddailycomment() {
         getajaxdata("RefreshChat", { lastcheckdate: moment(chatcheckdate).format("YYYY-MM-DD HH:mm:ss"), count: 10 }, PageChatCallBack);
     }, true, false);
 }
-var prgcheckdate = moment(new Date()).subtract('days', 1);
 function PageProgram() {
-    var localprg = loadlocalitem("program");
-    if (localprg != null)
-        prgcheckdate = moment(localprg.lastdate);
-    if (localprg != null && moment(new Date()).diff(moment(localprg.lastdate), 'minutes') < 3) {
+    checklocalitem("program", "GetProgram", null, false, function () {
         loadprogramfilters();
         loadprogram();
-    }
-    else
-        checkprogram(prgcheckdate);
+    });
 }
-function checkprogram(prgcheckdate) {
-    getajaxdata("GetProgram", { lastcheckdate: prgcheckdate.format("YYYY-MM-DD HH:mm:ss") }, function (data) {
-        prgcheckdate = moment(new Date());
-        if (data != undefined) {
-            data = JSON.parse(data);
-            savelocalitem("program", data, prgcheckdate);
-        }
+function checklocalitem(localname, ajaxmethod, ajaxparams, forcerefresh, fncallback) {
+    var localprg = loadlocalitem(localname);
+    if (forcerefresh || localprg == null || moment(new Date()).diff(moment(localprg.lastdate), 'minutes') > 60) {
+        var lastcheckdate = localprg == null || forcerefresh ? moment(new Date()).subtract('days', 1) : moment(localprg.lastdate);
+        if (ajaxparams == null)
+            ajaxparams = { lastcheckdate: lastcheckdate.format("YYYY-MM-DD HH:mm:ss") };
         else
-            savelocalitem("program", loadlocalitem("program").obj, prgcheckdate);
-        loadprogramfilters();
-        loadprogram();
-    }, false);
+            ajaxparams["lastcheckdate"] = lastcheckdate.format("YYYY-MM-DD HH:mm:ss");
+        getajaxdata(ajaxmethod, ajaxparams, function (data) {
+            if (data != undefined) {
+                data = JSON.parse(data);
+                savelocalitem(localname, data);
+            }
+            else
+                savelocalitem(localname, loadlocalitem(localname).obj);
+            if (fncallback != null) fncallback();
+        }, false);
+    }
+    else if (fncallback != null)
+        fncallback();
 }
 function loadprogramfilters() {
     var data = loadlocalitem("program").obj;
@@ -154,8 +149,6 @@ function loadprogramfilters() {
     $('#slcdate').selectmenu("refresh", true);
     $('#slccomp').selectmenu("refresh", true);
 }
-//var key = "one";
-//delete someObj[key];
 function loadprogram() {
     var data = loadlocalitem("program").obj;
     $("#ulprg").html('');
@@ -165,56 +158,38 @@ function loadprogram() {
     //    var betspan = "<span tid='#tid' oid='#oid' rt='#rt'></span>";
     str += $('#liprgfirst')[0].outerHTML;
     $(data.events).each(function () {
-        if (this.sid == $('#slcsport').val() && $('#slcdate').val() == moment(this.edate).format("YYYY-MM-DD") && ($('#slccomp').val() == "" || $('#slccomp').val() == this.cid)) {
+        if (this.sid == $('#slcsport').val() && $('#slcdate').val() == moment(this.edate).format("YYYY-MM-DD") && moment(this.edate) > moment(new Date())
+            && ($('#slccomp').val() == "" || $('#slccomp').val() == this.cid)) {
             //var li = $('#trproghelper')[0].outerHTML.replace(/tx/ig, 'tr').replace(/ty/ig, 'td');
             var li1 = $('#liprghead')[0].outerHTML;
             var li2 = $('#liprgbets')[0].outerHTML;
             li2 = li2.replace(/#evid/g, this.id);
             li1 = li1.replace(/#evid/g, this.id);
-            li1 = li1.replace(/#evname/g, this.ename);
+            li1 = li1.replace(/#evname/g, this.ename + (this.dl == "1" ? "[D]" : ""));
             li1 = li1.replace(/#time/g, moment(new Date(this.edate)).format("HH:mm"));
             li1 = li1.replace(/#code/g, this.code);
             li1 = li1.replace(/#mbs/g, this.mbs);
             li1 = li1.replace(/#edate/g, this.edate);
             li1 = li1.replace(/#sid/g, this.sid);
-            //console.log(this.bets);
-            //            var addoption = '<a href="#" onclick="AddToCoupon(#id,#oid,#rt)" class="bt#oid ui-btn ui-mini" >#rt</a>'.replace(/#id/, this.id);
-            //            var noclick = '<a href="#" class="ui-btn ui-mini" >-</a>';
-            var betclick = '<a href="#" onclick="betdetailclick(this,#evid,#oid,#rt)" class="xoid#oid">#rt</a>'.replace(/#evid/g, this.id);
+            var betclick = '<a href="#" onclick="addremovebet(this,#evid,#oid,#rt)" class="xoid#oid">#rt</a>'.replace(/#evid/g, this.id);
             var noclick = '<a href="#">-</a>';
             li2 = li2.replace(/#bcount/g, '+' + this.bets.length);
             if (this.sid == 1) {
-                var o1 = jQuery.grep(this.bets, function (bet) { return bet.oid == 1; })[0].rt;
-                var o0 = jQuery.grep(this.bets, function (bet) { return bet.oid == 2; })[0].rt;
-                var o2 = jQuery.grep(this.bets, function (bet) { return bet.oid == 3; })[0].rt;
+                var o1 = jQuery.grep(this.bets, function (bet) { return bet.oid == 1; })[0].rt.toFixed(2);
+                var o0 = jQuery.grep(this.bets, function (bet) { return bet.oid == 2; })[0].rt.toFixed(2);
+                var o2 = jQuery.grep(this.bets, function (bet) { return bet.oid == 3; })[0].rt.toFixed(2);
                 li2 = li2.replace(/#link1/g, betclick.replace(/#oid/ig, 1).replace(/#rt/ig, o1));
                 li2 = li2.replace(/#link2/g, betclick.replace(/#oid/ig, 2).replace(/#rt/ig, o0));
                 li2 = li2.replace(/#link3/g, betclick.replace(/#oid/ig, 3).replace(/#rt/ig, o2));
-                //                var oa = jQuery.grep(this.bets, function (bet) { return bet.oid == 15; });
-                //                var ou = jQuery.grep(this.bets, function (bet) { return bet.oid == 16; });
-                //                if (oa.length > 0)
-                //                    li2 = li2.replace(/#oa/g, addoption.replace(/#oid/ig, 15).replace(/#rt/ig, oa[0].rt));
-                //                else
-                //                    li2 = li2.replace(/#oa/g, noclick);
-                //                if (ou.length > 0)
-                //                    li = li.replace(/#ou/g, addoption.replace(/#oid/ig, 16).replace(/#rt/ig, ou[0].rt));
-                //                else
-                //                    li = li.replace(/#ou/g, noclick);
             }
             else if (this.sid == 2) {
-                var o1 = jQuery.grep(this.bets, function (bet) { return bet.oid == 72; })[0].rt;
+                var o1 = jQuery.grep(this.bets, function (bet) { return bet.oid == 72; })[0].rt.toFixed(2);
                 //var o0 = jQuery.grep(this.bets, function (bet) { return bet.oid == 2; })[0].rt;
-                var o2 = jQuery.grep(this.bets, function (bet) { return bet.oid == 73; })[0].rt;
+                var o2 = jQuery.grep(this.bets, function (bet) { return bet.oid == 73; })[0].rt.toFixed(2);
                 li2 = li2.replace(/#link1/g, betclick.replace(/#oid/ig, 72).replace(/#rt/ig, o1));
                 li2 = li2.replace(/#link2/g, noclick);
                 li2 = li2.replace(/#link3/g, betclick.replace(/#oid/ig, 73).replace(/#rt/ig, o2));
-                //                li = li.replace(/#oa/g, noclick);
-                //                li = li.replace(/#ou/g, noclick);
             }
-            //            var bets = '';
-            //            for (var i = 0; i < this.bets.length; i++)
-            //                bets += betspan.replace(/#oid/ig, this.bets[i].oid).replace(/#rt/ig, this.bets[i].rt).replace(/#tid/ig, this.bets[i].tid);
-            //            li = li.replace(/#bets/ig, bets);
 
             str += li1;
             str += li2;
@@ -222,19 +197,33 @@ function loadprogram() {
     });
     $("#ulprg").append(str);
     $("#ulprg").listview('refresh');
-    //    $("#tblprog > tbody").append(str);
-    //    $("#tblprog").table("refresh");
 
+    var vbets = [1, 2, 3, 72, 73];
     if (localStorage["coupon"] != null) {
         var json = JSON.parse(localStorage["coupon"]);
-        for (var i = 0; i < json.bets.length; i++) 
-            $('.tx2' + json.bets[i].evid + ' .xoid' + json.bets[i].oid).parent().addClass('stripeactive');
-        //$('.tr' + json.bets[i].evid + ' .bt' + json.bets[i].oid).addClass('ui-btn-active');
+        for (var i = 0; i < json.bets.length; i++)
+            if (vbets.indexOf(json.bets[i].oid) != -1)
+                $('.tx2' + json.bets[i].evid + ' .xoid' + json.bets[i].oid).parent().addClass('stripeactive');
+            else
+                $('.tx2' + json.bets[i].evid + ' .xoidx').parent().addClass('stripeactive');
     }
 }
 function openbetdetailspage(evid) {
     localStorage["betdetailevid"] = evid;
     $.mobile.changePage("#betdetail");
+}
+function getmbsforoid(evmbs, oid) {
+    var allbettypes = JSON.parse(localStorage["bettypes"]);
+    var tid = jQuery.grep(allbettypes, function (item) { return item.oid == oid; })[0].tid;
+    return getmbsfortid(evmbs, tid);
+}
+function getmbsfortid(evmbs, tid) {
+    var mbs = evmbs;
+    if ((tid == 10 || tid == 16) && mbs > 2)//iy/ms
+        mbs = 2;
+    if (tid == 11)//iy/ms
+        mbs = 1;
+    return mbs;
 }
 function PageBetdetails() {
     var evid = parseInt(localStorage["betdetailevid"]);
@@ -257,8 +246,8 @@ function PageBetdetails() {
         var eventbetgroupdef = jQuery.grep(allbettypes, function (item) { return item.tid == bettypes[i]; });
         var eventbettypeoptions = jQuery.grep(ev.bets, function (item) { return item.tid == bettypes[i]; });
         var o1def = jQuery.grep(eventbetgroupdef, function (item) { return item.oid == eventbettypeoptions[0].oid; })[0].oname;
-        var o2def = jQuery.grep(eventbetgroupdef, function (item) { return item.oid == eventbettypeoptions[1].oid; })[0].oname;
-        str += liheader.replace(/#txt/ig, eventbetgroupdef[0].tname);
+        var o2def = eventbettypeoptions.length > 1 ? jQuery.grep(eventbetgroupdef, function (item) { return item.oid == eventbettypeoptions[1].oid; })[0].oname : "";
+        str += liheader.replace(/#txt/ig, eventbetgroupdef[0].tname + "[" + getmbsfortid(ev.mbs, bettypes[i]) + "]");
         if (eventbettypeoptions.length == 2) {
             var grpstr = li2.replace(/#evid/ig, ev.id).replace(/#oid1/ig, eventbettypeoptions[0].oid).replace(/#oid2/ig, eventbettypeoptions[1].oid);
             grpstr = grpstr.replace(/#rt1/ig, eventbettypeoptions[0].rt).replace(/#rt2/ig, eventbettypeoptions[1].rt);
@@ -270,7 +259,7 @@ function PageBetdetails() {
             var grpstr = li3.replace(/#evid/ig, ev.id).replace(/#oid1/ig, eventbettypeoptions[0].oid).replace(/#oid2/ig, eventbettypeoptions[1].oid).replace(/#oid3/ig, eventbettypeoptions[2].oid);
             grpstr = grpstr.replace(/#rt1/ig, eventbettypeoptions[0].rt).replace(/#rt2/ig, eventbettypeoptions[1].rt).replace(/#rt3/ig, eventbettypeoptions[2].rt);
             grpstr = grpstr.replace(/#on1/ig, o1def).replace(/#on2/ig, o2def).replace(/#on3/ig, o3def);
-            grpstr = grpstr.replace(/onclick="betdetailclick\(this,\d+,77\)"/ig, '');
+            grpstr = grpstr.replace(/onclick="addremovebet\(this,\d+,77\)"/ig, '');
             str += grpstr;
         }
         else if (eventbettypeoptions.length == 4) {
@@ -295,7 +284,7 @@ function PageBetdetails() {
                 var oid2 = j + 1 < eventbettypeoptions.length ? eventbettypeoptions[j + 1].oid : '';
                 var oid3 = j + 2 < eventbettypeoptions.length ? eventbettypeoptions[j + 2].oid : '';
                 var oid4 = j + 3 < eventbettypeoptions.length ? eventbettypeoptions[j + 3].oid : '';
-                var rt1 = j >= eventbettypeoptions.length ? eventbettypeoptions[j].rt : '';
+                var rt1 = j < eventbettypeoptions.length ? eventbettypeoptions[j].rt : '';
                 var rt2 = j + 1 < eventbettypeoptions.length ? eventbettypeoptions[j + 1].rt : '';
                 var rt3 = j + 2 < eventbettypeoptions.length ? eventbettypeoptions[j + 2].rt : '';
                 var rt4 = j + 3 < eventbettypeoptions.length ? eventbettypeoptions[j + 3].rt : '';
@@ -306,20 +295,17 @@ function PageBetdetails() {
             }
         }
     }
-    //console.log(bettypes);
-    //    str += liheader.replace(/#txt/ig, 'Maç Sonucu');
-    //    str += li2.replace(/#evid/ig, ev.id).replace(/#oid1/ig, 1).replace(/#oid2/ig, 3)
-    //    .replace(/#rt1/ig, 1.25).replace(/#rt2/ig, 3.85).replace(/#on1/ig, '1').replace(/#on2/ig, '2').replace(/#tid/ig, 3);
-    //    str += liheader.replace(/#txt/ig, 'Maç Sonucu ASD');
-    //    str += li3.replace(/#evid/ig, ev.id).replace(/#oid1/ig, 1).replace(/#oid2/ig, 3).replace(/#oid3/ig, 4)
-    //    .replace(/#rt1/ig, 1.25).replace(/#rt2/ig, 3.85).replace(/#rt3/ig, 4.85).replace(/#on1/ig, '1').replace(/#on2/ig, '2')
-    //    .replace(/#on3/ig, '3').replace(/#tid/ig, 4);
-
-
     $('#bets').html(str);
     $('#bets').listview('refresh');
+
+    if (localStorage["coupon"] != null) {
+        var json = JSON.parse(localStorage["coupon"]);
+        for (var i = 0; i < json.bets.length; i++)
+            if (evid == json.bets[i].evid)
+                $('#ad' + json.bets[i].oid).parent().addClass('stripeactive');
+    }
 }
-function betdetailclick(elm, evid, oid, rt) {
+function addremovebet(elm, evid, oid, rt) {
     var hasclassbefore = $(elm).parent().hasClass('stripeactive');
     $('#bets').children().children().children().removeClass('stripeactive');
     $('.tx2' + evid).children().children().removeClass('stripeactive');
@@ -342,90 +328,35 @@ function betdetailclick(elm, evid, oid, rt) {
     couponjson.bets = filteredbets;
     var trcp = $('.tx1' + evid);
     var code = trcp.children().children('span').eq(0).html().trim().match(/([^\.]+)\.(.*)/)[1];
-    var mbs = trcp.children().children('span').eq(1).html().trim();
+    var mbs = trcp.children().children('span').eq(1).text().trim();
     var evname = trcp.children().children('span').eq(0).html().trim().match(/([^\.]+)\.(.*)/)[2];
     if (!isremove)
-        couponjson.bets.push({ oid: oid, evid: evid, name: evname, mbs: mbs, code: code, time: trcp.attr('edate')
+        couponjson.bets.push({
+            oid: oid, evid: evid, name: evname, mbs: getmbsforoid(mbs, oid), code: code, time: trcp.attr('edate')
         , sid: trcp.attr('sid'), isbanko: false, rt: rt
         });
 
-    couponjson = RefreshCoupon(couponjson);
-    console.log(couponjson);
-    localStorage["coupon"] = JSON.stringify(couponjson);
-}
-function openbetdetails(evid) {
-    var bettypes = JSON.parse(localStorage["bettypes"]);
-    var bets = $('#bets' + evid).children();
-    var types = new Array();
-    for (var i = 0; i < bets.length; i++) {
-        var tid = jQuery.grep(bettypes, function (bet) { return bet.oid == $(bets[i]).attr('oid'); });
-        if (types.indexOf(tid[0].tid) == -1)
-            types.push(tid[0].tid);
-    }
-    var str = '';
-    for (var i = 0; i < types.length; i++) {
-        var opts = jQuery.grep(bets, function (bet) { return $(bet).attr('tid') == types[i]; });
-        var tbl = '<table data-role="table" data-mode="columntoggle" class="movie-list gtbl"><thead><tr><th colspan="#cnt">#tn</th></tr></thead><tbody>#opts</tbody></table>';
-        var ltype = jQuery.grep(bettypes, function (bet) { return bet.tid == types[i]; });
-        if (opts.length > 7)
-            tbl = tbl.replace(/#cnt/, 7).replace(/#tn/, ltype[0].sname);
-        else
-            tbl = tbl.replace(/#cnt/, opts.length).replace(/#tn/, ltype[0].sname);
-        var tds = '';
-        var tds2 = '';
-        var tds3 = '';
-        var tds4 = '';
-        var tds5 = '';
-        var tds6 = '';
-
-        for (var j = 0; j < opts.length; j++) {
-            var lopt = jQuery.grep(bettypes, function (bet) { return bet.oid == $(opts[j]).attr('oid'); });
-            var td = '<td><a href="#" class="bt#oid ui-btn ui-mini" onclick="AddToCoupon(#evid,#oid,#rt)">#on(#rt)</a></td>'.replace(/#on/, lopt[0].oname).replace(/#rt/ig, $(opts[j]).attr('rt')).replace(/#evid/, evid).replace(/#oid/ig, $(opts[j]).attr('oid'));
-            if (j < 7)
-                tds += td;
-            else if (j < 14)
-                tds2 += td;
-            else if (j < 21)
-                tds3 += td;
-            else if (j < 28)
-                tds4 += td;
-            else if (j < 35)
-                tds5 += td;
-            else
-                tds6 += td;
-        }
-        if (opts.length < 8)
-            str += tbl.replace(/#opts/, '<tr>' + tds + '</tr>');
-        else if (opts.length < 16)
-            str += tbl.replace(/#opts/, '<tr>' + tds + '</tr>' + '<tr>' + tds2 + '</tr>');
-        else if (opts.length < 24)
-            str += tbl.replace(/#opts/, '<tr>' + tds + '</tr>' + '<tr>' + tds2 + '</tr>' + '<tr>' + tds3 + '</tr>');
-        else if (opts.length < 24)
-            str += tbl.replace(/#opts/, '<tr>' + tds + '</tr>' + '<tr>' + tds2 + '</tr>' + '<tr>' + tds3 + '</tr>' + '<tr>' + tds4 + '</tr>');
-        else if (opts.length < 32)
-            str += tbl.replace(/#opts/, '<tr>' + tds + '</tr>' + '<tr>' + tds2 + '</tr>' + '<tr>' + tds3 + '</tr>' + '<tr>' + tds4 + '</tr>' + '<tr>' + tds5 + '</tr>');
-        else
-            str += tbl.replace(/#opts/, '<tr>' + tds + '</tr>' + '<tr>' + tds2 + '</tr>' + '<tr>' + tds3 + '</tr>' + '<tr>' + tds4 + '</tr>' + '<tr>' + tds5 + '</tr>' + '<tr>' + tds6 + '</tr>');
-    }
-    $('#betdetails #tables').html(str);
-    $('#betdetails #tables .gtbl').table();
-    $('#betdetails').popup('open');
+    RefreshCoupon(couponjson);
 }
 function ClearCoupon() {
     if (localStorage["coupon"] != null)
         delete localStorage["coupon"];
+    RefreshCouponShower();
     LoadCoupon();
 }
 function RefreshCoupon(couponjson) {
     var rt = 1;
     var mbs = 0;
+    var exist1mbs = false;
     for (var i = 0; i < couponjson.bets.length; i++) {
         var bt = couponjson.bets[i];
         rt *= bt.rt;
         if (bt.mbs > mbs)
             mbs = bt.mbs;
+        if (bt.mbs == 1)
+            exist1mbs = true;
     }
-    couponjson.mbs = mbs;
+    couponjson.mbs = exist1mbs ? 1 : mbs;
     couponjson.rt = rt;
     couponjson.count = 1;
     couponjson.totalwin = couponjson.stake * couponjson.rt;
@@ -443,11 +374,13 @@ function RefreshCoupon(couponjson) {
         for (var i = minsys; i <= maxsys; i++)
             sysstr += btn.replace(/#sysno/ig, i).replace(/#lastchild/ig, i == maxsys ? "ui-last-child" : "");
 
+    //if ($.mobile.activePage == 'coupon') {
     $('#systems').html('<div class="ui-controlgroup-controls ">' + sysstr + '</div>');
     $('#systems').controlgroup().controlgroup('refresh');
 
     for (var i = 0; i < couponjson.systems.length; i++)
         $('#sys' + couponjson.systems[i]).toggleClass('ui-btn-active');
+    //}
 
     if (couponjson.systems.length == 0)
         couponjson.issys = false;
@@ -459,14 +392,15 @@ function RefreshCoupon(couponjson) {
         couponjson.count = combs.couponcount;
     }
     localStorage["coupon"] = JSON.stringify(couponjson);
-    return couponjson;
-}
-function setsys() {
-    var couponjson = JSON.parse(localStorage["coupon"]);
-    couponjson.issys = true;
-    couponjson.systems.push(3);
-    localStorage["coupon"] = JSON.stringify(couponjson);
-    console.log(couponjson);
+    if ($.mobile.activePage.attr("id") == 'coupon') {
+        RefreshCouponShower();
+    }
+    if (couponjson.mbs > 0 && couponjson.mbs <= couponjson.bets.length)
+        $('#sendcpnbtn').show();
+    else
+        $('#sendcpnbtn').hide();
+
+    //return couponjson;
 }
 function PageCoupon() {
     if ($('#slcstake option').length == 0) {
@@ -474,12 +408,13 @@ function PageCoupon() {
             appendoption($('#slcstake'), i, i, false);
         $('#slcstake').selectmenu("refresh", true);
     }
+    RefreshCouponShower();
     LoadCoupon();
 }
 function changestake(elm, evid) {
     var jsoncoupon = JSON.parse(localStorage["coupon"]);
     jsoncoupon.stake = parseInt($('#slcstake').val());
-    localStorage["coupon"] = JSON.stringify(jsoncoupon);
+    //localStorage["coupon"] = JSON.stringify(jsoncoupon);
     RefreshCoupon(jsoncoupon);
     LoadCoupon();
 }
@@ -491,69 +426,195 @@ function SwitchSys(elm, sysno) {
     else
         jsoncoupon.systems.push(sysno);
 
-    jsoncoupon.issys = jsoncoupon.systems > 0;
-    localStorage["coupon"] = JSON.stringify(jsoncoupon);
+    jsoncoupon.issys = jsoncoupon.systems.length > 0;
+    //localStorage["coupon"] = JSON.stringify(jsoncoupon);
     RefreshCoupon(jsoncoupon);
     $(elm).toggleClass('ui-btn-active');
 }
 function SwitchBanko(elm, evid) {
     var jsoncoupon = JSON.parse(localStorage["coupon"]);
-    var isremove = false;
     for (var i = 0; i < jsoncoupon.bets.length; i++)
         if (jsoncoupon.bets[i].evid == evid) {
-            isremove = jsoncoupon.bets[i].isbanko;
             jsoncoupon.bets[i].isbanko = !jsoncoupon.bets[i].isbanko;
         }
 
-    localStorage["coupon"] = JSON.stringify(jsoncoupon);
+    //localStorage["coupon"] = JSON.stringify(jsoncoupon);
     RefreshCoupon(jsoncoupon);
     $(elm).toggleClass('ui-btn-active');
 }
 function DeleteBet(evid) {
     var jsoncoupon = JSON.parse(localStorage["coupon"]);
     jsoncoupon.bets = jQuery.grep(jsoncoupon.bets, function (bet) { return bet.evid != evid; });
-    localStorage["coupon"] = JSON.stringify(jsoncoupon);
+    //localStorage["coupon"] = JSON.stringify(jsoncoupon);
     RefreshCoupon(jsoncoupon);
     LoadCoupon();
 }
 function LoadCoupon() {
-    $("#tblcoupon > tbody").html('');
+    //$("#tblcoupon > tbody").html('');
+    $('#ulcpn').html('');
     var data = localStorage["coupon"];
     if (data == null)
         return;
     data = JSON.parse(data);
     if (data.bets.length == 0)
         return;
-    var deleter = '<a href="#" onclick="DeleteBet(#evid)" class="ui-btn ui-mini" >Sil</a>';
-    var bnkbtn = '<a href="#" onclick="SwitchBanko(this,#evid)" class="ui-btn ui-mini #act" >Banko</a>';
+    var deleter = '<a href="#" onclick="DeleteBet(#evid)" class="ui-btn ui-mini notopspace" >Sil</a>';
+    var bnkbtn = '<a href="#" onclick="SwitchBanko(this,#evid)" class="ui-btn ui-mini notopspace #act" >Banko</a>';
     var str = '';
     var bettypes = JSON.parse(localStorage["bettypes"]);
-
+    str += $('#licpfirst')[0].outerHTML;
     $(data.bets).each(function () {
-        var li = $('#trcouponhelper')[0].outerHTML.replace(/tx/ig, 'tr').replace(/ty/ig, 'td');
+        var li1 = $('#licphead')[0].outerHTML;
+        var li2 = $('#licp')[0].outerHTML;
         var oid = this.oid;
         var betdet = jQuery.grep(bettypes, function (bet) { return bet.oid == oid; });
-        li = li.replace(/#bet/g, betdet[0].tname + ':' + betdet[0].oname);
-        li = li.replace(/#evname/g, this.name);
-        li = li.replace(/#time/g, moment(new Date(this.time)).format("DD.MM.YY HH:mm"));
-        li = li.replace(/#code/g, this.code);
-        li = li.replace(/#mbs/g, this.mbs);
-        li = li.replace(/#rt/g, this.rt);
-        li = li.replace(/#bnk/g, bnkbtn.replace(/#evid/ig, this.evid).replace(/#act/ig, this.isbanko ? "ui-btn-active" : ""));
-        li = li.replace(/#del/g, deleter.replace(/#evid/ig, this.evid));
+        li2 = li2.replace(/#on/g, betdet[0].oname);
+        li2 = li2.replace(/#tn/g, betdet[0].tname);
+        li1 = li1.replace(/#evname/g, this.name);
+        li1 = li1.replace(/#time/g, moment(this.time).format("DD.MM.YY HH:mm"));
+        li1 = li1.replace(/#code/g, this.code);
+        li1 = li1.replace(/#mbs/g, getmbsfortid(this.mbs, betdet[0].tid));
+        li2 = li2.replace(/#rt/g, this.rt);
+        li2 = li2.replace(/#bnk/g, bnkbtn.replace(/#evid/ig, this.evid).replace(/#act/ig, this.isbanko ? "ui-btn-active" : ""));
+        li2 = li2.replace(/#del/g, deleter.replace(/#evid/ig, this.evid));
         //li = li.replace(/#edate/g, this.edate);
 
-        str += li;
+        str += li1;
+        str += li2;
     });
-    $("#tblcoupon > tbody").append(str);
-    $("#tblcoupon").table("refresh");
+    $("#ulcpn").append(str);
+    $("#ulcpn").listview("refresh");
 
+    //RefreshCouponShower();
+
+    RefreshCoupon(data);
+}
+function RefreshCouponShower() {
+    var data = localStorage["coupon"];
+    if (data == null) {
+        $('#cpfree').show();
+        $('#cpdets').hide();
+        return;
+    }
+    data = JSON.parse(data);
+    if (data.bets.length == 0) {
+        $('#cpfree').show();
+        $('#cpdets').hide();
+        return;
+    }
+    $('#cpfree').hide();
+    $('#cpdets').show();
     $("#slcstake").val(data.stake);
     $('#slcstake').selectmenu("refresh", true);
 
     $("#spnwin").html(data.totalwin.toFixed(2));
     $("#spnratio").html(data.rt.toFixed(2));
     $("#spncount").html(data.count);
+}
+function PageProfile() {
+    checklocalitem("mycoupons", "getcoupons", { memberid: getmember().MemberID }, false, LoadMyCoupons);
+}
+function LoadMyCoupons() {
+    var data = loadlocalitem("mycoupons").obj;
+    $("#cpns").html('');
+    var ul1 = '<ul data-role="listview" class="cplist" data-inset="true" >';
+    var ul2 = '</ul>';
+    var str = '';
+    $(data).each(function () {
+        var li1 = $('#licpshead')[0].outerHTML.replace('id=', 'xid=');
+        var oid = this.oid;
+        li1 = li1.replace(/#nick/g, '');
+        li1 = li1.replace(/#ctime/g, moment(this.CreateDate).fromNow());
+        li1 = li1.replace(/#rt/g, this.Ratio);
+        li1 = li1.replace(/#winning/g, this.CouponWin);
+        li1 = li1.replace(/#cpid/g, this.CouponID);
+        li1 = li1.replace(/#cstake/g, this.Stake);
+        li1 = li1.replace(/#ccount/g, this.CouponMultiplier == 1 ? "" : "(x" + this.CouponMultiplier + ")");
+        str += ul1 + li1;
+        for (var i = 0; i < this.bets.length; i++) {
+            var li2 = $('#licpsitem')[0].outerHTML.replace('id=', 'xid=');
 
-    RefreshCoupon(data);
+            li2 = li2.replace(/#evname/g, this.bets[i].evname);
+            li2 = li2.replace(/#time/g, moment(new Date(this.bets[i].evdate)).format("DD.MM.YY HH:mm"));
+            li2 = li2.replace(/#code/g, this.bets[i].evcode);
+            li2 = li2.replace(/#mbs/g, getmbsforoid(this.bets[i].mbs, this.bets[i].oid));
+            li2 = li2.replace(/#tn/g, this.bets[i].tsn);
+            li2 = li2.replace(/#rt/g, this.bets[i].rt.toFixed(2));
+            li2 = li2.replace(/#on/g, this.bets[i].on);
+            li2 = li2.replace(/#bnk/g, this.bets[i].IsBanko ? "[B]" : "");
+            li2 = li2.replace(/#dl/g, this.bets[i].IsDuello ? "[D]" : "");
+
+            str += li2;
+        }
+    });
+
+    $("#cpns").append(str);
+    $(".cplist").listview();
+}
+function SendCoupon() {
+    var couponjson = JSON.parse(localStorage["coupon"]);
+    var senderobj = { bets: new Array(), stake: couponjson.stake, issys: couponjson.issys, systems: couponjson.systems };
+    for (var i = 0; i < couponjson.bets.length; i++) {
+        var bet = { oid: couponjson.bets[i].oid, evid: couponjson.bets[i].evid, bnk: couponjson.bets[i].isbanko };
+        senderobj.bets.push(bet);
+    }
+
+    getajaxdata("SendCoupon", { cpndata: JSON.stringify(senderobj) },
+      function (data) {
+          if (data == "0") {
+              alert("Kupon Oynandı!");
+              ClearCoupon();
+              getajaxdata("ValidateToken", { token: getmember().MobileGuid }, ValidateCB, false, true, true);
+              checklocalitem("mycoupons", "getcoupons", { memberid: getmember().MemberID }, true, null);
+              checklocalitem("allcoupons", "getcoupons", null, true, null);
+          }
+          else
+              alert(strip(data));
+      }
+      , true, false, true);
+}
+function strip(html) {
+    var tmp = document.createElement("DIV");
+    tmp.innerHTML = html;
+    return tmp.textContent || tmp.innerText || "";
+}
+function PageCoupons() {
+    checklocalitem("allcoupons", "getcoupons", null, false, CouponsLoader);
+}
+function CouponsLoader() {
+    var data = loadlocalitem("allcoupons").obj;
+    $("#cpnsall").html('');
+    var ul1 = '<ul data-role="listview" class="cplist2" data-inset="true" >';
+    var ul2 = '</ul>';
+    var str = '';
+    $(data).each(function () {
+        var li1 = $('#licpshead')[0].outerHTML.replace('id=', 'xid=');
+        var oid = this.oid;
+
+        li1 = li1.replace(/#nick/g, '<div>#nick kuponu</div>'.replace(/#nick/, this.membernick));
+        li1 = li1.replace(/#ctime/g, moment(this.CreateDate).fromNow());
+        li1 = li1.replace(/#rt/g, this.Ratio);
+        li1 = li1.replace(/#winning/g, this.CouponWin);
+        li1 = li1.replace(/#cpid/g, this.CouponID);
+        li1 = li1.replace(/#cstake/g, this.Stake);
+        li1 = li1.replace(/#ccount/g, this.CouponMultiplier == 1 ? "" : "(x" + this.CouponMultiplier + ")");
+        str += ul1 + li1;
+        for (var i = 0; i < this.bets.length; i++) {
+            var li2 = $('#licpsitem')[0].outerHTML.replace('id=', 'xid=');
+            li2 = li2.replace(/#evname/g, this.bets[i].evname);
+            li2 = li2.replace(/#time/g, moment(new Date(this.bets[i].evdate)).format("DD.MM.YY HH:mm"));
+            li2 = li2.replace(/#code/g, this.bets[i].evcode);
+            li2 = li2.replace(/#mbs/g, getmbsforoid(this.bets[i].mbs, this.bets[i].oid));
+            li2 = li2.replace(/#tn/g, this.bets[i].tsn);
+            li2 = li2.replace(/#rt/g, this.bets[i].rt.toFixed(2));
+            li2 = li2.replace(/#on/g, this.bets[i].on);
+            li2 = li2.replace(/#bnk/g, this.bets[i].IsBanko ? "[B]" : "");
+            li2 = li2.replace(/#dl/g, this.bets[i].IsDuello ? "[D]" : "");
+
+            str += li2;
+        }
+    });
+
+    $("#cpnsall").append(str);
+    $(".cplist2").listview();
 }

@@ -1,11 +1,11 @@
-﻿var siteurl = "http://www.bahisor.com/";
-//var siteurl = "http://localhost:26087/";
+﻿//var siteurl = "http://www.bahisor.com/";
+var siteurl = "http://localhost:26087/";
 var apiurl = siteurl + "mobile/";
 var defaulttext = 'Yazmak için tıklayın...';
 var chatcheckdate = moment(new Date()).subtract('days', 1);
 var chatinterval;
 var isvalidmember = false;
-var currentversion = 5;
+var currentversion = 1;
 $(document).on("ready", function () {
     moment.lang('tr');
     jQuery.ajaxSetup({
@@ -72,8 +72,9 @@ $(document).on("pageshow", function (event) {
         $.mobile.changePage("#loginDialog");
     }
     else if (getmember() != null)
-        if (!isvalidmember)
+        if (!isvalidmember) {
             getajaxdata("ValidateToken", { token: getmember().MobileGuid }, ValidateCB, false, true, true);
+        }
     //$.mobile.changePage("#loginDialog", { transition: "pop", role: "dialog", reverse: false });
     if (chatinterval != null)
         clearInterval(chatinterval);
@@ -81,7 +82,9 @@ $(document).on("pageshow", function (event) {
         if (event.target.id == 'main') PageChat();
         else if (event.target.id == 'program') PageProgram();
         else if (event.target.id == 'coupon') PageCoupon();
-        else if (event.target.id == 'betdetail') PageBetdetails(); 
+        else if (event.target.id == 'betdetail') PageBetdetails();
+        else if (event.target.id == 'profile') PageProfile();
+        else if (event.target.id == 'coupons') PageCoupons();
     }
     //$('.ui-navbar ul li').button();
 });
@@ -94,13 +97,9 @@ $(document).on("pagecreate", function (event) {
         //        $(event.target).append($('#basefooter')[0].outerHTML);
     }
 });
-//$(document).one("pageshow", function () {
-//    $("body > [data-role='header']").toolbar();
-//    $("body > [data-role='header'] [data-role='navbar']").navbar();
-//});
 $(document).on("pagebeforecreate ", function (event) {
 });
-function savelocalitem(objname, objvalue, lastdate) {
+function savelocalitem(objname, objvalue) {
     var jsonData = {
         "lastdate": moment(new Date()),
         "obj": objvalue
@@ -116,11 +115,19 @@ function ValidateCB(data) {
     if (data == null)
         $.mobile.changePage("#loginDialog");
     else {
-        isvalidmember = true;
-        var jdata = JSON.parse(atob(decodeURIComponent(escape(data))));
-        $('.mydata').html(getmember().NickName + '(' + getmember().Credits + '+' + getmember().DailyLoan + ' P)');
-        $.mobile.changePage("#" + localStorage["redirpage"]);
+        aftervalidate(data);
     }
+}
+function aftervalidate(data) {
+    isvalidmember = true;
+    var jdata = JSON.parse(atob(decodeURIComponent(escape(data))));
+    setmember(data);
+    $('.mydata').html(getmember().NickName + '(' + getmember().Credits + '+' + getmember().DailyLoan + ' P)');
+    checklocalitem("program", "GetProgram", null, false, null);
+    checklocalitem("mycoupons", "getcoupons", { memberid: getmember().MemberID }, false, null);
+    checklocalitem("allcoupons", "getcoupons", null, false, null);
+    $.mobile.changePage("#" + localStorage["redirpage"]);
+    localStorage.removeItem("redirpage");
 }
 function TryLogin() {
     if ($('#loginnick').val() == '' || $('#loginpass').val() == '') {
@@ -135,13 +142,7 @@ function ResetLogin() {
 }
 function TryLoginCB(data) {
     if (data != null) {
-        var jdata = JSON.parse(atob(decodeURIComponent(escape(data))));
-        //console.log(jdata);
-        isvalidmember = true;
-        setmember(data);
-        $.mobile.changePage("#" + localStorage["redirpage"]);
-        localStorage.removeItem("redirpage");
-        $('.mydata').html(getmember().NickName + '(' + getmember().Credits + '+' + getmember().DailyLoan + ' P)');
+        aftervalidate(data);
     }
     else
         alert('Yanlış kullanıcı adı veya şifre');

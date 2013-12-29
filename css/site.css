@@ -60,35 +60,7 @@ ul.touch li.ui-li-has-alt a.ui-btn
     font-size: inherit;
     margin-bottom: .75em;
 }
-/* These apply across all breakpoints because they are outside of a media query */
-/* Make the labels light gray all caps across the board */
-.movie-list
-{
-}
-.movie-list thead th, .movie-list tbody th .ui-table-cell-label, .movie-list tbody td
-{
-    text-transform: uppercase;
-    font-size: .7em;
-    color: rgba(0,0,0,0.5);
-    font-weight: normal;
-}
-.movie-list thead
-{
-    background-color: Gray;
-}
-.movie-list thead th
-{
-    color: white;
-}
-.movie-list tbody td a
-{
-    font-size: .66em;
-    font-weight: normal;
-}
-.ui-table-columntoggle-btn
-{
-    display: none;
-}
+
 .custom-border-radius
 {
     -webkit-border-radius: .3125em;
@@ -141,7 +113,7 @@ ul.touch li.ui-li-has-alt a.ui-btn
     background-color: Gray !important;
     text-align: center !important;
 }
-.ui-block-a, ui-block-b, ui-block-c, ui-block-d, ui-block-e
+.ui-block-a, .ui-block-b, .ui-block-c, .ui-block-d, ui-block-e
 {
     text-align: center !important;
 }
@@ -176,10 +148,24 @@ a
 {
     padding:0px !important;
 }
-.ui-select
+.selectleft
 {
-    width:30px !important;
     float:left;
 }
-
-
+.alignleft
+{
+    text-align:left !important;
+}
+.notopspace
+{
+    padding-top:0px;margin-top:0px;
+}
+.nopadding
+{
+    padding:0px !important;
+    display:inline;
+}
+.lessmargin
+{
+    margin: .7em 0;
+}
