@@ -14,4 +14,5 @@
   <preference name="android-targetSdkVersion" value="14" />
   <preference name="permissions" value="none"/>
   <preference name="phonegap-version" value="2.9.0" />
+  <icon src="css/images/bhs1.png" />
 </widget>
