@@ -1,19 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-    <widget xmlns   = "http://www.w3.org/ns/widgets"
-        xmlns:gap   = "http://phonegap.com/ns/1.0"
-        id          = "com.phonegap.example"
-        versionCode = "10" 
-        version     = "1.0.0" >
-
-    <name>Bahisör Mobil</name>
-
-    <description>
-        Bahisör Mobil Uygulamasý
-    </description>
-
-    <author href="http://www.bahisor.com" email="info@bahisor.com">
-        Bahisor
-    </author>
-    <preference name="permissions" value="none"/>
-
+<widget xmlns   = "http://www.w3.org/ns/widgets"
+    xmlns:gap   = "http://phonegap.com/ns/1.0"
+    id          = "com.phonegap.example"
+    versionCode = "10"
+    version     = "1.0.0" >
+  <name>Bahisor Mobil</name>
+  <description>
+    Bahisor Mobil Uygulamasi
+  </description>
+  <author href="http://www.bahisor.com" email="info@bahisor.com">
+    Bahisor
+  </author>
+  <preference name="android-targetSdkVersion" value="14" />
+  <preference name="permissions" value="none"/>
+  <preference name="phonegap-version" value="2.9.0" />
 </widget>
