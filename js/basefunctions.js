@@ -5,7 +5,7 @@ var defaulttext = 'Yazmak için tıklayın...';
 var chatcheckdate = moment(new Date()).subtract('days', 1);
 var chatinterval;
 var isvalidmember = false;
-var currentversion = 1;
+var currentversion = 2;
 $(document).on("ready", function () {
     moment.lang('tr');
     jQuery.ajaxSetup({
@@ -17,6 +17,8 @@ $(document).on("ready", function () {
         },
         success: function () { $.mobile.loading('hide'); }
     });
+    FastClick.attach(document.body);
+    $.mobile.ajaxEnabled = false;
     if (localStorage["bettypes"] == null)
         getajaxdata("GetBetTypes", null, function (data) { var jdata = JSON.parse(data); localStorage["bettypes"] = data; }, false, true, true);
 });
