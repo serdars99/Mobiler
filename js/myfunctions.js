@@ -570,6 +570,8 @@ function DeleteCoupon(cpnid) {
               alert("Kupon Silindi!");
               ClearCoupon();
               getajaxdata("ValidateToken", { token: getmember().MobileGuid }, ValidateCB, false, true, true);
+              refreshneeds["mycoupons"] = true;
+              refreshneeds["allcoupons"] = true;
               checklocalitem("mycoupons", "getcoupons", { memberid: getmember().MemberID }, true, null);
               checklocalitem("allcoupons", "getcoupons", null, true, null);
               PageProfile();
