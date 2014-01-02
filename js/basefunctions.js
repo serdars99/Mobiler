@@ -5,7 +5,8 @@ var defaulttext = 'Yazmak için tıklayın...';
 var chatcheckdate = moment(new Date()).subtract('days', 1);
 var chatinterval;
 var isvalidmember = false;
-var currentversion = 2;
+var currentversion = 3;
+var refreshneeds = { program: true, mycoupons: true, allcoupons: true };
 $(document).on("ready", function () {
     moment.lang('tr');
     jQuery.ajaxSetup({
@@ -124,7 +125,8 @@ function aftervalidate(data) {
     isvalidmember = true;
     var jdata = JSON.parse(atob(decodeURIComponent(escape(data))));
     setmember(data);
-    $('.mydata').html(getmember().NickName + '(' + getmember().Credits + '+' + getmember().DailyLoan + ' P)');
+    $('.mynick').html(getmember().NickName);
+    $('.mypoints').html('(' + getmember().Credits + '+' + getmember().DailyLoan + ' P)');
     checklocalitem("program", "GetProgram", null, false, null);
     checklocalitem("mycoupons", "getcoupons", { memberid: getmember().MemberID }, false, null);
     checklocalitem("allcoupons", "getcoupons", null, false, null);

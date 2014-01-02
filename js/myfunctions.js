@@ -129,11 +129,16 @@ function checklocalitem(localname, ajaxmethod, ajaxparams, forcerefresh, fncallb
             }
             else
                 savelocalitem(localname, loadlocalitem(localname).obj);
-            if (fncallback != null) fncallback();
+            if (fncallback != null && refreshneeds[localname] == true) {
+                refreshneeds[localname] = false;
+                fncallback();
+            }
         }, false);
     }
-    else if (fncallback != null)
+    else if (fncallback != null && refreshneeds[localname] == true) {
+        refreshneeds[localname] = false;
         fncallback();
+    }
 }
 function loadprogramfilters() {
     var data = loadlocalitem("program").obj;
@@ -153,6 +158,7 @@ function loadprogram() {
     var data = loadlocalitem("program").obj;
     $("#ulprg").html('');
     //$("#tblprog > tbody").html('');
+    console.log("prgload");
     var str = '';
     var deleters = '1,2';
     //    var betspan = "<span tid='#tid' oid='#oid' rt='#rt'></span>";
@@ -458,8 +464,8 @@ function LoadCoupon() {
     data = JSON.parse(data);
     if (data.bets.length == 0)
         return;
-    var deleter = '<a href="#" onclick="DeleteBet(#evid)" class="ui-btn ui-mini notopspace" >Sil</a>';
-    var bnkbtn = '<a href="#" onclick="SwitchBanko(this,#evid)" class="ui-btn ui-mini notopspace #act" >Banko</a>';
+    var deleter = '<a href="#" onclick="DeleteBet(#evid)" class="ui-btn ui-mini notopspace btnmargin" >Sil</a>';
+    var bnkbtn = '<a href="#" onclick="SwitchBanko(this,#evid)" class="ui-btn ui-mini notopspace btnmargin normaloverflow #act" >Banko</a>';
     var str = '';
     var bettypes = JSON.parse(localStorage["bettypes"]);
     str += $('#licpfirst')[0].outerHTML;
@@ -469,12 +475,12 @@ function LoadCoupon() {
         var oid = this.oid;
         var betdet = jQuery.grep(bettypes, function (bet) { return bet.oid == oid; });
         li2 = li2.replace(/#on/g, betdet[0].oname);
-        li2 = li2.replace(/#tn/g, betdet[0].tname);
+        li2 = li2.replace(/#tn/g, betdet[0].sname);
         li1 = li1.replace(/#evname/g, this.name);
         li1 = li1.replace(/#time/g, moment(this.time).format("DD.MM.YY HH:mm"));
         li1 = li1.replace(/#code/g, this.code);
         li1 = li1.replace(/#mbs/g, getmbsfortid(this.mbs, betdet[0].tid));
-        li2 = li2.replace(/#rt/g, this.rt);
+        li2 = li2.replace(/#rt/g, this.rt.toFixed(2));
         li2 = li2.replace(/#bnk/g, bnkbtn.replace(/#evid/ig, this.evid).replace(/#act/ig, this.isbanko ? "ui-btn-active" : ""));
         li2 = li2.replace(/#del/g, deleter.replace(/#evid/ig, this.evid));
         //li = li.replace(/#edate/g, this.edate);
@@ -526,7 +532,12 @@ function LoadMyCoupons() {
         li1 = li1.replace(/#nick/g, '');
         li1 = li1.replace(/#ctime/g, moment(this.CreateDate).fromNow());
         li1 = li1.replace(/#rt/g, this.Ratio);
-        li1 = li1.replace(/#winning/g, this.CouponWin);
+        var deleter = '&nbsp;<em onclick="DeleteCoupon(#cpnid)">Sil</em>';
+        if (moment(new Date()).diff(moment(this.CreateDate), 'minutes') < 10)
+            deleter = deleter.replace(/#cpnid/, this.CouponID);
+        else
+            deleter = "";
+        li1 = li1.replace(/#winning/g, (this.CouponWin == null ? "0" : this.CouponWin) + deleter);
         li1 = li1.replace(/#cpid/g, this.CouponID);
         li1 = li1.replace(/#cstake/g, this.Stake);
         li1 = li1.replace(/#ccount/g, this.CouponMultiplier == 1 ? "" : "(x" + this.CouponMultiplier + ")");
@@ -550,6 +561,22 @@ function LoadMyCoupons() {
 
     $("#cpns").append(str);
     $(".cplist").listview();
+}
+function DeleteCoupon(cpnid) {
+    getajaxdata("DeleteCoupon", { couponID: cpnid },
+      function (data) {
+          if (data == "0") {
+              alert("Kupon Silindi!");
+              ClearCoupon();
+              getajaxdata("ValidateToken", { token: getmember().MobileGuid }, ValidateCB, false, true, true);
+              checklocalitem("mycoupons", "getcoupons", { memberid: getmember().MemberID }, true, null);
+              checklocalitem("allcoupons", "getcoupons", null, true, null);
+              PageProfile();
+          }
+          else
+              alert(strip(data));
+      }
+      , true, false, true);
 }
 function SendCoupon() {
     var couponjson = JSON.parse(localStorage["coupon"]);
@@ -594,7 +621,7 @@ function CouponsLoader() {
         li1 = li1.replace(/#nick/g, '<div>#nick kuponu</div>'.replace(/#nick/, this.membernick));
         li1 = li1.replace(/#ctime/g, moment(this.CreateDate).fromNow());
         li1 = li1.replace(/#rt/g, this.Ratio);
-        li1 = li1.replace(/#winning/g, this.CouponWin);
+        li1 = li1.replace(/#winning/g, this.CouponWin == null ? "0" : this.CouponWin);
         li1 = li1.replace(/#cpid/g, this.CouponID);
         li1 = li1.replace(/#cstake/g, this.Stake);
         li1 = li1.replace(/#ccount/g, this.CouponMultiplier == 1 ? "" : "(x" + this.CouponMultiplier + ")");

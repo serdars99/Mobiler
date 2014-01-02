@@ -5,21 +5,18 @@
     <title>Bahisör Mobile</title>
     <meta name="viewport" content="width=device-width, user-scalable=no" />
     <link href="css/jquery.mobile-1.4.0.min.css" rel="stylesheet" type="text/css" />
-    <link href="css/site.css?v5" rel="stylesheet" type="text/css" />
+    <link href="css/site.css?v7" rel="stylesheet" type="text/css" />
 </head>
 <body>
     <div data-role="page" id="main">
         <div data-role="header" id="baseheader" data-theme="b" data-id="dheader" data-position="fixed">
-            <div class="ui-bar">
+            <div class="ui-bar smallerbar">
                 <a href="#outside" data-icon="bars" data-iconpos="notext">Menu</a>
-                <h1>Bahisör - <span class="mydata"></span>
+                <h1>Bahisör - <span class="mynick"></span><span class="mypoints"></span>
                 </h1>
             </div>
         </div>
-        <div id="home-content" data-role="content">
-            <div class="chatTitle">
-                Günün Sohbeti
-            </div>
+        <div id="home-content" data-role="content" class="nopadding">
             <textarea id="usertxt"></textarea>
             <ul data-role="listview" data-divider-theme="a" data-inset="true" id="lastchat" class="touch">
             </ul>
@@ -46,21 +43,20 @@
                     <li><a href="#program" class="ui-link ui-btn  ui-icon-grid ui-btn-icon-top">Program</a></li>
                     <li><a href="#coupon" class="ui-link ui-btn  ui-icon-grid ui-btn-icon-top">Kuponum</a></li>
                     <li><a href="#profile" class="ui-link ui-btn  ui-icon-grid ui-btn-icon-top">Profilim</a></li>
-                    <li><a href="#coupons" class="ui-link ui-btn  ui-icon-grid ui-btn-icon-top">Kuponlar</a></li>
+                    <!--<li><a href="#coupons" class="ui-link ui-btn  ui-icon-grid ui-btn-icon-top">Kuponlar</a></li>-->
                 </ul>
             </div>
         </div>
     </div>
     <div data-role="page" id="program">
         <div data-role="header" data-theme="b" data-id="dheader" data-position="fixed">
-            <div class="ui-bar">
+            <div class="ui-bar smallerbar">
                 <a href="#outside" data-icon="bars" data-iconpos="notext">Menu</a>
-                <h1>Bahisör - <span class="mydata"></span>
+                <h1>Bahisör - <span class="mynick"></span><span class="mypoints"></span>
                 </h1>
-                <a href="#" data-role="button" data-rel="back" data-icon="arrow-l" class="ui-btn-right">Geri</a>
             </div>
         </div>
-        <div data-role="content">
+        <div data-role="content" class="nopadding">
             <div class="ui-grid-b">
                 <div class="ui-block-a">
                     <select id="slcsport" data-mini="true" onchange="loadprogram();">
@@ -88,18 +84,17 @@
                     <li><a href="#program" class="ui-link ui-btn ui-icon-grid ui-btn-icon-top ui-state-persist ui-btn-active">Program</a></li>
                     <li><a href="#coupon" class="ui-link ui-btn ui-icon-grid ui-btn-icon-top">Kuponum</a></li>
                     <li><a href="#profile" class="ui-link ui-btn ui-icon-grid ui-btn-icon-top">Profilim</a></li>
-                    <li><a href="#coupons" class="ui-link ui-btn  ui-icon-grid ui-btn-icon-top">Kuponlar</a></li>
+                    <!--<li><a href="#coupons" class="ui-link ui-btn  ui-icon-grid ui-btn-icon-top">Kuponlar</a></li>-->
                 </ul>
             </div>
         </div>
     </div>
     <div data-role="page" id="coupon">
         <div data-role="header" data-theme="b" data-id="dheader" data-position="fixed">
-            <div class="ui-bar">
+            <div class="ui-bar smallerbar">
                 <a href="#outside" data-icon="bars" data-iconpos="notext">Menu</a>
-                <h1>Bahisör - <span class="mydata"></span>
+                <h1>Bahisör - <span class="mynick"></span><span class="mypoints"></span>
                 </h1>
-                <a href="#" data-role="button" data-rel="back" data-icon="arrow-l" class="ui-btn-right">Geri</a>
             </div>
         </div>
         <div data-role="content">
@@ -108,29 +103,28 @@
             <div id="cpfree">
                 Kuponunuz şu anda boş.
             </div>
-            <div style="padding-top: 5px">&nbsp;</div>
-            <div id="cpdets" style="display: none">
+            <div id="cpdets" style="display: none" class="nopadding font9">
                 <div class="ui-bar nopadding">
-                    <div class="ui-field-contain lessmargin">
+                    <div class="ui-field-contain lessmargin ">
                         <div class="ui-grid-a">
                             <div class="ui-block-a alignleft">
                                 <div class="ui-field-contain lessmargin">
-                                    <label for="select-native-1" style="float: left">
+                                    <label for="select-native-1" class="nopadding" style="float:left !important">
                                         Misli:&nbsp;</label>
                                     <select id="slcstake" name="slcstake" data-mini="true" class="ui-btn-inline selectleft" onchange="changestake();">
                                     </select>
                                 </div>
                             </div>
                             <div class="ui-block-b alignleft">
-                                <div class="ui-field-contain lessmargin">
-                                    &nbsp;&nbsp;Kol.Sayısı:<span id="spncount"></span>
+                                <div class="ui-field-contain lessmargin boldfont">
+                                    Kol.Sayısı:<span id="spncount"></span>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="ui-bar nopadding">
-                    <div class="ui-field-contain lessmargin">
+                    <div class="ui-field-contain lessmargin nopadding">
                         <label>
                             Sistem:</label>
                         <div data-role="controlgroup" id="systems" data-type="horizontal" data-mini="true">
@@ -138,7 +132,7 @@
                     </div>
                 </div>
                 <div class="ui-bar nopadding">
-                    <div class="ui-grid-a">
+                    <div class="ui-grid-a ">
                         <div class="ui-block-a alignleft">
                             <div class="ui-field-contain lessmargin">
                                 Oran:<span id="spnratio"></span>
@@ -168,21 +162,20 @@
                     <li><a href="#program" class="ui-link ui-btn ui-icon-grid ui-btn-icon-top ">Program</a></li>
                     <li><a href="#coupon" class="ui-link ui-btn  ui-icon-grid ui-btn-icon-top ui-state-persist ui-btn-active">Kuponum</a></li>
                     <li><a href="#profile" class="ui-link ui-btn  ui-icon-grid ui-btn-icon-top ">Profilim</a></li>
-                    <li><a href="#coupons" class="ui-link ui-btn  ui-icon-grid ui-btn-icon-top">Kuponlar</a></li>
+                    <!--<li><a href="#coupons" class="ui-link ui-btn  ui-icon-grid ui-btn-icon-top">Kuponlar</a></li>-->
                 </ul>
             </div>
         </div>
     </div>
     <div data-role="page" id="profile">
         <div data-role="header" data-theme="b" data-id="dheader" data-position="fixed">
-            <div class="ui-bar">
+            <div class="ui-bar smallerbar">
                 <a href="#outside" data-icon="bars" data-iconpos="notext">Menu</a>
-                <h1>Bahisör - <span class="mydata"></span>
+                <h1>Bahisör - <span class="mynick"></span><span class="mypoints"></span>
                 </h1>
-                <a href="#" data-role="button" data-rel="back" data-icon="arrow-l" class="ui-btn-right">Geri</a>
             </div>
         </div>
-        <div data-role="content">
+        <div data-role="content" class="nopadding">
             <div id="cpns">
                 <!--   <ul data-role="listview" class="cplist" data-inset="true">
                     <li id="li2" data-role="list-divider">
@@ -242,18 +235,17 @@
                     <li><a href="#program" class="ui-link ui-btn ui-icon-grid ui-btn-icon-top ">Program</a></li>
                     <li><a href="#coupon" class="ui-link ui-btn ui-icon-grid ui-btn-icon-top ">Kuponum</a></li>
                     <li><a href="#profile" class="ui-link ui-btn ui-icon-grid ui-btn-icon-top  ui-state-persist ui-btn-active">Profilim</a></li>
-                    <li><a href="#coupons" class="ui-link ui-btn ui-icon-grid ui-btn-icon-top ">Kuponlar</a></li>
+                    <!--<li><a href="#coupons" class="ui-link ui-btn ui-icon-grid ui-btn-icon-top ">Kuponlar</a></li>-->
                 </ul>
             </div>
         </div>
     </div>
     <div data-role="page" id="coupons">
         <div data-role="header" data-theme="b" data-id="dheader" data-position="fixed">
-            <div class="ui-bar">
+            <div class="ui-bar smallerbar">
                 <a href="#outside" data-icon="bars" data-iconpos="notext">Menu</a>
-                <h1>Bahisör - <span class="mydata"></span>
+                <h1>Bahisör - <span class="mynick"></span><span class="mypoints"></span>
                 </h1>
-                <a href="#" data-role="button" data-rel="back" data-icon="arrow-l" class="ui-btn-right">Geri</a>
             </div>
         </div>
         <div data-role="content">
@@ -267,14 +259,14 @@
                     <li><a href="#program" class="ui-link ui-btn ui-icon-grid ui-btn-icon-top ">Program</a></li>
                     <li><a href="#coupon" class="ui-link ui-btn ui-icon-grid ui-btn-icon-top ">Kuponum</a></li>
                     <li><a href="#profile" class="ui-link ui-btn ui-icon-grid ui-btn-icon-top">Profilim</a></li>
-                    <li><a href="#others" class="ui-link ui-btn ui-icon-grid ui-btn-icon-top ui-state-persist ui-btn-active">Kuponlar</a></li>
+                    <!--<li><a href="#others" class="ui-link ui-btn ui-icon-grid ui-btn-icon-top ui-state-persist ui-btn-active">Kuponlar</a></li>-->
                 </ul>
             </div>
         </div>
     </div>
     <div data-role="popup" id="betdetail">
         <div data-role="header" data-theme="b">
-            <div class="ui-bar">
+            <div class="ui-bar smallerbar">
                 <a href="#" data-rel="back" data-icon="arrow-l" data-iconpos="notext" data-shadow="false"
                     data-icon-shadow="false">Geri</a>
                 <h1>
@@ -327,7 +319,7 @@
                 </p>
             </li>
         </ul>
-        <li data-role="list-divider" id="licpshead">
+        <li data-role="list-divider" id="licpshead" class="font7">
             #nick
             <div class="ui-grid-c" style="padding-top: 5px">
                 <div class="ui-block-a alignleft">
@@ -344,14 +336,14 @@
                         <div class="ui-block-a">
                             Kazanç:#winning
                         </div>
-                        <div class="ui-block-b">
+       <!--                 <div class="ui-block-b">
                             <a onclick="#" class="ui-btn-inline">Sil</a>
-                        </div>
+                        </div>-->
                     </div>
                 </div>
             </div>
         </li>
-        <li id="licpsitem">
+        <li id="licpsitem" class="font7">
             <div class="ui-bar prgheadline">
                 <div class="ui-grid-a">
                     <div class="ui-block-a alignleft" style="width: 78%">
@@ -378,15 +370,15 @@
                 </div>
             </div>
         </li>
-        <li data-role="list-divider" id="licphead">
+        <li data-role="list-divider" id="licphead" class="smallerfont alignleft littleleftpadding">
             <div class="ui-bar prgheadline">
                 #time&nbsp;&nbsp;<span>#code.#evname</span><span style="float: right !important">#mbs&nbsp;</span>
             </div>
         </li>
-        <li id="licp">
-            <div class="ui-grid-a" style="padding-top: 5px">
-                <div class="ui-block-a " style="width: 75%">
-                    <div class="ui-grid-b">
+        <li id="licp" class="nopadding smallerfont littleleftpadding">
+            <div class="ui-grid-a nopadding" style="padding-top: 5px">
+                <div class="ui-block-a " style="width: 65%">
+                    <div class="ui-grid-b nopadding">
                         <div class="ui-block-a alignleft">
                             #tn
                         </div>
@@ -398,8 +390,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="ui-block-b" style="width: 25%">
-                    <div class="ui-grid-a">
+                <div class="ui-block-b" style="width: 35%">
+                    <div class="ui-grid-a nopadding">
                         <div class="ui-block-a">
                             #bnk
                         </div>
@@ -577,7 +569,7 @@
     <!--<script type="text/javascript" src="js/moment.min.js"></script>-->
     <script type="text/javascript" src="js/moment-with-langs.min.js"></script>
     <script type="text/javascript" src="js/fastclick.js"></script>
-    <script type="text/javascript" src="js/basefunctions.js?v7"></script>
-    <script type="text/javascript" src="js/myfunctions.js?v7"></script>
+    <script type="text/javascript" src="js/basefunctions.js?v9"></script>
+    <script type="text/javascript" src="js/myfunctions.js?v9"></script>
 </body>
 </html>
