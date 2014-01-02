@@ -4,7 +4,7 @@
     id          = "com.phonegap.example"
     versionCode = "10"
     version     = "1.0.0" >
-  <name>Bahisor Mobil</name>
+  <name>Bahisor</name>
   <description>
     Bahisor Mobil Uygulamasi
   </description>
@@ -13,6 +13,5 @@
   </author>
   <preference name="android-targetSdkVersion" value="14" />
   <preference name="permissions" value="none"/>
-  <preference name="phonegap-version" value="2.9.0" />
-  <icon src="css/images/bhs1.png" />
+  <icon src="css/images/bbbb.png" />
 </widget>
