@@ -4,7 +4,7 @@
     id          = "com.phonegap.example"
     versionCode = "10"
     version     = "1.0.0" >
-  <name>Bahisor</name>
+  <name>Bahisör</name>
   <description>
     Bahisor Mobil Uygulamasi
   </description>
