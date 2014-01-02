@@ -557,6 +557,7 @@ function LoadMyCoupons() {
 
             str += li2;
         }
+        str +=  ul2;
     });
 
     $("#cpns").append(str);
@@ -592,6 +593,8 @@ function SendCoupon() {
               alert("Kupon Oynandı!");
               ClearCoupon();
               getajaxdata("ValidateToken", { token: getmember().MobileGuid }, ValidateCB, false, true, true);
+              refreshneeds["mycoupons"] = true;
+              refreshneeds["allcoupons"] = true;
               checklocalitem("mycoupons", "getcoupons", { memberid: getmember().MemberID }, true, null);
               checklocalitem("allcoupons", "getcoupons", null, true, null);
           }
@@ -640,6 +643,7 @@ function CouponsLoader() {
 
             str += li2;
         }
+        str += ul2;
     });
 
     $("#cpnsall").append(str);
