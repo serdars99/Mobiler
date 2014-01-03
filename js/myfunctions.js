@@ -464,7 +464,7 @@ function LoadCoupon() {
     data = JSON.parse(data);
     if (data.bets.length == 0)
         return;
-    var deleter = '<a href="#" onclick="DeleteBet(#evid)" class="ui-btn ui-mini notopspace btnmargin" >Sil</a>';
+    var deleter = '<a href="#" onclick="DeleteBet(#evid)" class="ui-btn ui-mini notopspace btnmargin normaloverflow" >Sil</a>';
     var bnkbtn = '<a href="#" onclick="SwitchBanko(this,#evid)" class="ui-btn ui-mini notopspace btnmargin normaloverflow #act" >Banko</a>';
     var str = '';
     var bettypes = JSON.parse(localStorage["bettypes"]);
