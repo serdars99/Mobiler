@@ -18,10 +18,18 @@ $(document).on("ready", function () {
         },
         success: function () { $.mobile.loading('hide'); }
     });
-    FastClick.attach(document.body);
-    $.mobile.ajaxEnabled = false;
+    $.mobile.allowCrossDomainPages = true;
+    $.support.cors = true;
+    $.mobile.defaultPageTransition = 'none';
+    $.mobile.defaultDialogTransition = 'none';
+    $.mobile.buttonMarkup.hoverDelay = 0;
     if (localStorage["bettypes"] == null)
         getajaxdata("GetBetTypes", null, function (data) { var jdata = JSON.parse(data); localStorage["bettypes"] = data; }, false, true, true);
+});
+$(document).on("mobileinit", function () {
+    $.mobile.defaultPageTransition = 'none';
+    $.mobile.defaultDialogTransition = 'none';
+    $.mobile.buttonMarkup.hoverDelay = 0;
 });
 function appendoption(elm, value, text, selected) {
     if (selected)
