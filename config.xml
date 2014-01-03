@@ -3,10 +3,10 @@
     xmlns:gap   = "http://phonegap.com/ns/1.0"
     id          = "com.phonegap.example"
     versionCode = "10"
-    version     = "1.0.0" >
+    version     = "1.1.0" >
   <name>Bahisör</name>
   <description>
-    Bahisor Mobil Uygulamasi
+    Bahisor Mobil Uygulamasi Beta
   </description>
   <author href="http://www.bahisor.com" email="info@bahisor.com">
     Bahisor
